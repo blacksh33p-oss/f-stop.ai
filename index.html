@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>f-stop.ai | Professional AI Scene & Prompt Director</title>
 
-  <!-- SEO & SOCIAL META TAGS -->
   <meta name="description" content="Master your AI art. Convert camera settings (Aperture, ISO, Film Stock) and directorial vision into flawless prompts for Midjourney, Flux, and DALL-E 3." />
   <meta name="keywords" content="AI, Midjourney, Flux, DALL-E, prompt engineering, photography, cinematography, generative AI" />
   <meta property="og:title" content="f-stop.ai | Professional AI Scene & Prompt Director" />
@@ -13,8 +12,7 @@
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-HRY8X4JY7Q"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HRY8X4JY7Q"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -23,7 +21,6 @@
   gtag('config', 'G-HRY8X4JY7Q');
 </script>
   
-  <!-- FAVICON (TRANSPARENT WIREFRAME) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234f46e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><line x1='14.31' y1='8' x2='20.05' y2='17.94'/><line x1='9.69' y1='8' x2='21.17' y2='8'/><line x1='7.38' y1='12' x2='13.12' y2='2.06'/><line x1='9.69' y1='16' x2='3.95' y2='6.06'/><line x1='14.31' y1='16' x2='2.83' y2='16'/><line x1='16.62' y1='12' x2='10.88' y2='21.94'/></svg>" />
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -181,7 +178,6 @@
         </h1>
       </div>
 
-      <!-- TOP DECK LCD (ALWAYS VISIBLE) -->
       <div class="flex lcd-panel rounded-sm p-2 px-3 gap-4 md:gap-6 items-center font-lcd select-none shadow-lg transform opacity-90 w-full lg:w-auto justify-between lg:justify-start overflow-x-auto">
           <div class="flex flex-col items-center min-w-[40px]">
               <span class="text-[8px] font-bold tracking-widest opacity-60">SHUTTER</span>
@@ -217,20 +213,28 @@
     </header>
 
     <div class="grid lg:grid-cols-12 gap-8">
-      <!-- CONTROLS -->
       <section class="lg:col-span-7 space-y-6">
-        <div class="relative hardware-screen rounded-sm p-1 focus-within:border-indigo-500 transition group">
-          <textarea id="scene" rows="3" class="w-full bg-transparent border-0 text-white placeholder-studio-600 p-4 focus:ring-0 text-sm font-mono resize-none" placeholder="INPUT SCENE DATA..."></textarea>
-          <button id="clearSceneBtn" type="button" class="absolute top-2 right-2 text-[9px] uppercase font-bold text-studio-500 hover:text-white bg-studio-900/90 border border-studio-700 rounded-sm px-2 py-1 transition-all opacity-0 group-hover:opacity-100">Clear</button>
+        <div class="space-y-4">
+          <div class="relative hardware-screen rounded-sm p-1 focus-within:border-indigo-500 transition group">
+            <textarea id="scene" rows="3" class="w-full bg-transparent border-0 text-white placeholder-studio-600 p-4 focus:ring-0 text-sm font-mono resize-none" placeholder="INPUT SCENE DATA..."></textarea>
+            <button id="clearSceneBtn" type="button" class="absolute top-2 right-2 text-[9px] uppercase font-bold text-studio-500 hover:text-white bg-studio-900/90 border border-studio-700 rounded-sm px-2 py-1 transition-all opacity-0 group-hover:opacity-100">Clear</button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="location" class="hardware-label block mb-2">Location / Coordinates</label>
+              <input type="text" id="location" class="w-full hardware-screen rounded-sm text-xs text-white p-2.5 focus:border-indigo-500 outline-none placeholder-studio-700" placeholder="e.g., Cairo, Egypt or 30.0444, 31.2357" />
+            </div>
+            <div>
+              <label for="datetime" class="hardware-label block mb-2">Date & Time</label>
+              <input type="datetime-local" id="datetime" class="w-full hardware-screen rounded-sm text-xs text-white p-2.5 focus:border-indigo-500 outline-none placeholder-studio-700" />
+            </div>
+          </div>
         </div>
         
-        <!-- PRODUCTION BRIEFING REMOVED -->
         <input id="targetYear" type="hidden" value="2025" />
         <input id="photographerStyle" type="hidden" value="None" />
         <textarea id="dynamicTrigger" style="display:none"></textarea>
-        <!-- END PRODUCTION BRIEFING REMOVED -->
-
-        <!-- PRESET ENGINE -->
         <div class="hardware-panel rounded-md p-5 relative z-30">
           <div class="flex items-center justify-between mb-3">
             <label class="hardware-label">Style Engine</label>
@@ -267,7 +271,6 @@
           </div>
         </div>
 
-        <!-- TECH CONTROLS -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="space-y-5">
             <div>
@@ -342,7 +345,6 @@
 
         <button id="generateBtn" type="button" class="w-full rounded-sm bg-white text-black py-4 text-xs font-black hover:bg-gray-200 transition shadow-[0_0_20px_rgba(255,255,255,0.1)] uppercase tracking-[0.2em]">Generate & Save to History</button>
         
-        <!-- SUPPORT MODULE -->
         <div class="grid grid-cols-2 gap-3 mt-4">
           <a href="https://buymeacoffee.com/fdashstop" target="_blank" onclick="gtag('event', 'click_buymeacoffee', {'event_category': 'engagement','event_label': 'sidebar_button'})" class="rounded-sm border border-studio-700 bg-studio-900 hover:border-yellow-500/50 hover:text-yellow-500 text-studio-400 text-[10px] font-bold uppercase tracking-widest py-3 flex items-center justify-center gap-2 transition group">
   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-70 group-hover:opacity-100"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg> Buy Coffee
@@ -355,7 +357,6 @@
 
       <section class="lg:col-span-5 space-y-6">
         <div class="sticky top-6 space-y-4">
-          <!-- MODEL SWITCHER -->
           <div class="flex justify-center mb-2">
              <div class="flex bg-studio-900 border border-studio-700 rounded-sm p-1 gap-1">
                 <button type="button" data-model="midjourney" class="model-btn active px-3 py-1 text-[9px] font-bold uppercase text-studio-400 hover:text-white rounded-sm transition">Midjourney</button>
@@ -366,11 +367,9 @@
 
           <div class="flex items-center gap-2 text-studio-500 mb-2"><div class="h-px flex-1 bg-studio-800"></div><span class="hardware-label">Outputs</span><div class="h-px flex-1 bg-studio-800"></div></div>
           
-          <!-- OUTPUT CONTAINER WITH GLASS EFFECT -->
           <div class="relative backdrop-blur-xl bg-black/40 border border-studio-800 rounded-md overflow-hidden shadow-2xl">
             <div class="absolute -inset-0.5 bg-gradient-to-r from-gray-500 to-gray-600 opacity-0 transition duration-500" id="outputGlow"></div>
             
-            <!-- MASTER -->
             <div class="relative border-b border-studio-800 p-1 bg-black/20">
               <div class="flex items-center justify-between px-3 py-2">
                  <h2 class="hardware-label text-studio-300">Master</h2>
@@ -384,7 +383,6 @@
               <textarea id="outMain" rows="5" class="w-full bg-transparent border-0 text-studio-100 p-3 text-xs font-mono focus:ring-0 resize-none leading-relaxed" readonly></textarea>
             </div>
 
-            <!-- DIRECTOR NOTES (REMOVED) -->
             <div class="relative border-b border-studio-800 p-1 bg-black/20 hidden">
                 <div class="flex items-center justify-between px-3 py-2">
                     <h2 class="hardware-label text-studio-500">Director Notes (LLM Prompt)</h2>
@@ -393,7 +391,6 @@
                 <textarea id="outLLM" rows="1" class="w-full bg-transparent border-0 text-studio-400 p-3 text-[10px] font-mono focus:ring-0 resize-none" readonly></textarea>
             </div>
 
-            <!-- VARIANTS -->
             <div class="grid grid-rows-3 divide-y divide-studio-800/50">
                 <div class="relative bg-black/10">
                    <div class="flex items-center justify-between px-3 py-2"><h3 class="hardware-label">Cinematic</h3><button data-copy="outCine" class="text-[9px] font-bold text-studio-500 hover:text-white transition">COPY</button></div>
@@ -414,7 +411,6 @@
     </div>
   </div>
 
-  <!-- RECIPE CARD (UNCHANGED) -->
   <div id="recipe-card-container" class="fixed left-[-9999px] top-0">
       <div id="recipe-card" class="w-[600px] bg-black border border-studio-700 p-8 font-sans text-white relative overflow-hidden">
           <div class="absolute -top-20 -right-20 w-64 h-64 bg-[var(--accent-color)] rounded-full opacity-20 blur-[80px]"></div>
@@ -462,7 +458,6 @@
       </div>
   </div>
 
-  <!-- HISTORY MODAL (UNCHANGED) -->
   <div id="historyModal" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 transition-opacity duration-300">
      <div class="bg-[#09090b] border border-studio-700 w-full max-w-lg rounded-md p-6 shadow-2xl relative max-h-[90vh] flex flex-col">
         <div class="flex justify-between items-center mb-4 border-b border-studio-800 pb-2">
@@ -583,6 +578,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { id:"illenberger-surreal-tabletop", title:"Sarah Illenberger", category:"Product", desc:"Cheerful, surreal objects.", data:{ genre:"product", camera:"Fujifilm GFX 100S II", lens:"60mm macro", focal:60, aperture:"f/8", shutter:"1/125s", iso:"200", lighting:"High Key White Cyc", composition:"Asymmetric Framing", lightingSetups:["high key white cyc, even wraparound light", "backlit translucent diffusion, soft halos"], vibe:"Sarah Illenberger style, playful surreal product concepts, everyday objects turned into witty visual puns, vivid color.", lensChar:"Dreamy Bloom", film:"Fuji Pro 400H", wb:"Daylight Balanced", grain:"Clean/No Grain", productSubgenre:"Tabletop Styled" } },
     { id:"shulman-midcentury-arch", title:"Julius Shulman", category:"Architecture", desc:"Clean mid-century hero shots.", data:{ genre:"architecture", camera:"Large Format 4x5", lens:"24mm tilt-shift", focal:24, aperture:"f/16", shutter:"1/30s", iso:"100", lighting:"Natural Light", composition:"Symmetrical Arch", lightingSetups:["window side light, soft falloff"], vibe:"Julius Shulman style, mid‑century modern hero shots, razor detail, corrected verticals, crisp daylight.", lensChar:"Clinical Sharp", film:"Kodak Ektachrome", wb:"Daylight Balanced", grain:"Clean/No Grain" } },
     { id:"baan-livedin-arch", title:"Iwan Baan", category:"Architecture", desc:"Documentary lived-in spaces.", data:{ genre:"architecture", camera:"Canon EOS R5 II", lens:"24-70mm zoom", focal:28, aperture:"f/5.6", shutter:"1/250s", iso:"800", lighting:"Natural Light", composition:"Rule of Thirds", vibe:"Iwan Baan style, documentary architecture, buildings shown as lived spaces, natural light only, candid human activity.", lensChar:"Clinical Sharp", film:"Kodak Portra 400", wb:"Daylight Balanced", grain:"Subtle Grain" } },
+    { id:"leibovitz-celeb", title:"Annie Leibovitz", category:"Portrait & Fashion", desc:"Theatrical staged storytelling.", data:{ genre:"cinematic", camera:"Canon EOS R5 II", lens:"85mm prime", focal:85, aperture:"f/4", shutter:"1/160s", iso:"200", lighting:"Studio Softbox", composition:"Centered", lightingSetups:["softbox key plus bounce"], vibe:"Annie Leibovitz style, cinematic celebrity portraiture, strong storytelling through set and light, rich color, confident subjects in staged environments.", lensChar:"Clinical Sharp", film:"Kodak Portra 400", wb:"Daylight Balanced", grain:"Subtle Grain" } },
+    { id:"newton-edgy", title:"Helmut Newton", category:"Portrait & Fashion", desc:"Hard light luxury provocation.", data:{ genre:"portrait", camera:"Sony A7R V", lens:"50mm prime", focal:50, aperture:"f/4", shutter:"1/250s", iso:"200", lighting:"Hard Strobe", composition:"Rule of Thirds", lightingSetups:["strip rim light, edge definition"], vibe:"Helmut Newton style, hard directional light, glossy high-contrast fashion, controlled provocation, sculpted bodies and luxury attitude.", lensChar:"Clinical Sharp", film:"Kodak Ektachrome", wb:"Daylight Balanced", grain:"Subtle Grain" } },
     { id:"leifer-iconic-action", title:"Neil Leifer", category:"Sports", desc:"Iconic frozen action.", data:{ genre:"sports", camera:"Sony Alpha 1", lens:"70-200mm zoom", focal:135, aperture:"f/2.8", shutter:"1/2000s", iso:"800", lighting:"Stadium Lights", composition:"Low Angle Hero", lightingSetups:["stadium top light, crisp action freeze"], vibe:"Neil Leifer style, iconic peak‑moment sports frames, bright punchy color, remote or low‑angle placement, perfectly timed action freeze.", lensChar:"Clinical Sharp", film:"Kodak Ektachrome", wb:"Daylight Balanced", grain:"Clean/No Grain" } },
     { id:"iooss-commercial-sport", title:"Walter Iooss Jr.", category:"Sports", desc:"Clean commercial portraits.", data:{ genre:"sports", camera:"Canon EOS R3", lens:"24-70mm zoom", focal:50, aperture:"f/4", shutter:"1/1000s", iso:"400", lighting:"Studio Softbox", composition:"Rule of Thirds", lightingSetups:["softbox key plus bounce", "strip rim light, edge definition"], vibe:"Walter Iooss Jr. style, crisp commercial sports portraiture, athletes lit like icons, clean backgrounds, controlled studio light.", lensChar:"Clinical Sharp", film:"Kodak Portra 400", wb:"Daylight Balanced", grain:"Clean/No Grain" } },
     { id:"lanting-intimate-wildlife", title:"Frans Lanting", category:"Wildlife", desc:"Intimate nature storytelling.", data:{ genre:"wildlife", camera:"Nikon Z9", lens:"100-400mm tele", focal:300, aperture:"f/5.6", shutter:"1/1000s", iso:"800", lighting:"Golden Hour", composition:"Rule of Thirds", vibe:"Frans Lanting style, intimate wildlife storytelling, respectful distance yet emotional closeness, warm natural light.", lensChar:"Clinical Sharp", film:"Kodak Portra 400", wb:"Daylight Balanced", grain:"Subtle Grain" } },
@@ -952,6 +949,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const getVal = (id) => { const el = document.getElementById(id); return el ? el.value : ""; };
         
         const scene = getVal("scene").trim() || "a compelling photography scene";
+        
+        // Get new location and datetime values
+        const locationVal = getVal("location").trim();
+        const datetimeVal = getVal("datetime");
+
+        // Format them
+        let locationPart = locationVal ? ` at ${locationVal}` : "";
+        let datetimePart = "";
+        if (datetimeVal) {
+          const dateObj = new Date(datetimeVal);
+          const date = dateObj.toLocaleDateString();
+          const time = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          datetimePart = ` on ${date} at ${time}`;
+        }
+
         const genre = getVal("genre");
         const cam = getVal("camera") === "None" ? "professional camera" : getVal("camera");
         const lens = getVal("lens") === "None" ? "suitable lens" : getVal("lens");
@@ -1014,7 +1026,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // --- MIDJOURNEY LOGIC (Paragraphs) ---
             
             let blocks = [];
-            blocks.push(`${scene}, ${genre} photography`);
+            // Add location and datetime to the scene description
+            blocks.push(`${scene}${locationPart}${datetimePart}, ${genre} photography`);
             blocks.push(`Shot on ${cam}, ${lens} ${focal}${techString ? `, ${techString}` : ""}`);
             
             let styleBlock = [];
@@ -1036,7 +1049,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (activeModel === "flux") {
             // --- FLUX.1 LOGIC (Grouped Sentences) ---
 
-            let p1 = `${scene}.`;
+            // Add location and datetime to the scene description
+            let p1 = `${scene}${locationPart}${datetimePart}.`;
             
             let p2 = `This is a ${genre} photograph shot on a ${cam} with a ${lens} lens ${focal ? `at ${focal}` : ""}.`;
             if(techString) p2 += ` Camera settings: ${techString}.`;
@@ -1062,7 +1076,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (activeModel === "dalle") {
             // --- DALL-E 3 / CHAT LOGIC (Instruction Blocks) ---
 
-            let p1 = `Please generate a photorealistic image of: ${scene}.`;
+            // Add location and datetime to the scene description
+            let p1 = `Please generate a photorealistic image of: ${scene}${locationPart}${datetimePart}.`;
             
             let p2 = `Simulate the physics of a ${genre} photo taken with ${cam} using a ${lens} lens ${focal ? `at ${focal}` : ""}.`;
             if(techString) p2 += ` Configure camera settings to: ${techString}.`;
@@ -1378,8 +1393,10 @@ document.addEventListener('DOMContentLoaded', () => {
          updatePrompt();
       });
 
-      ["scene", "camera", "lens", "focal", "aperture", "shutter", "iso", "lighting", "composition", "film", "wb", "grain", "lensChar", "productSubgenre", "targetYear", "dynamicTrigger"].forEach(id => {
+      // Add "location" and "datetime" to the list
+      ["scene", "location", "datetime", "camera", "lens", "focal", "aperture", "shutter", "iso", "lighting", "composition", "film", "wb", "grain", "lensChar", "productSubgenre", "targetYear", "dynamicTrigger"].forEach(id => {
          const el = document.getElementById(id);
+         // The input type check handles text/datetime-local inputs correctly
          if(el) el.addEventListener(el.tagName === "TEXTAREA" || el.tagName === "INPUT" ? "input" : "change", updatePrompt);
       });
 
