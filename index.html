@@ -125,6 +125,12 @@
       border-color: var(--accent-color) !important; 
       box-shadow: 0 0 10px -2px var(--accent-color);
     }
+
+    /* Hides the native calendar icon in Chrome, Safari, and Edge */
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+    }
     
     .ar-btn.active span { color: var(--accent-text) !important; }
     .ar-btn.active .ar-icon { border-color: var(--accent-text); }
@@ -227,9 +233,19 @@
             </div>
             <div>
               <label for="datetime" class="hardware-label block mb-2">Date & Time</label>
-              <input type="datetime-local" id="datetime" class="w-full hardware-screen rounded-sm text-xs text-white p-2.5 focus:border-indigo-500 outline-none placeholder-studio-700" />
+              <div class="relative group w-full">
+                <input type="datetime-local" id="datetime" class="w-full hardware-screen rounded-sm text-xs text-white p-2.5 focus:border-indigo-500 outline-none placeholder-studio-700" />
+                
+                <!-- 
+                     Clear Button Centering:
+                     top-1/2: Moves top edge to 50%
+                     -translate-y-1/2: Shifts button up by half its own height to center perfectly
+                -->
+                <button id="clearDateBtn" type="button" class="absolute top-1/2 -translate-y-1/2 right-2 text-[9px] uppercase font-bold text-studio-500 hover:text-white bg-studio-900/90 border border-studio-700 rounded-sm px-2 py-1 transition-all opacity-0 group-hover:opacity-100">
+                  Clear
+                </button>
+              </div>
             </div>
-          </div>
         </div>
         
         <input id="targetYear" type="hidden" value="2025" />
@@ -1249,6 +1265,17 @@ const basePresets = [
          renderDropdown(pInput.value);
          pDrop.classList.remove("hidden");
       });
+
+      // Clear Date Button Logic
+      const clearDateBtn = document.getElementById("clearDateBtn");
+      if (clearDateBtn) {
+        clearDateBtn.addEventListener("click", () => {
+            const dateEl = document.getElementById("datetime");
+            dateEl.value = "";
+            dateEl.focus(); // Brings focus back so you see the change
+            updatePrompt();
+        });
+      }
 
       document.addEventListener("click", (e) => {
          if(!document.getElementById("presetComboWrap").contains(e.target)) {
