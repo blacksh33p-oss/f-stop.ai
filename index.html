@@ -1262,9 +1262,37 @@ const basePresets = [
       });
 
       document.getElementById("randomPresetBtn").addEventListener("click", () => {
+         // 1. Randomize Location
+         const randomLocations = [
+            "Tokyo, Japan", "New York City, USA", "Cairo, Egypt", "London, UK",
+            "Paris, France", "Reykjavik, Iceland", "Sydney, Australia", 
+            "Hong Kong", "Los Angeles, USA", "Berlin, Germany", 
+            "Seoul, South Korea", "Mexico City, Mexico", "Mumbai, India",
+            "Kyoto, Japan", "Marrakech, Morocco", "Havana, Cuba",
+            "35.6895° N, 139.6917° E", "40.7128° N, 74.0060° W", // Coordinates
+            "Antarctica", "Sahara Desert", "Amazon Rainforest", "The Swiss Alps"
+         ];
+         document.getElementById("location").value = randomLocations[Math.floor(Math.random() * randomLocations.length)];
+
+         // 2. Randomize Date & Time (Between 1990 and 2030)
+         const start = new Date(1500, 0, 1).getTime();
+         const end = new Date(2030, 0, 1).getTime();
+         const randomDate = new Date(start + Math.random() * (end - start));
+         
+         // Format for datetime-local input (YYYY-MM-DDTHH:MM)
+         const year = randomDate.getFullYear();
+         const month = String(randomDate.getMonth() + 1).padStart(2, '0');
+         const day = String(randomDate.getDate()).padStart(2, '0');
+         const hour = String(randomDate.getHours()).padStart(2, '0');
+         const minute = String(randomDate.getMinutes()).padStart(2, '0');
+         document.getElementById("datetime").value = `${year}-${month}-${day}T${hour}:${minute}`;
+
+         // 3. Randomize Preset (Existing Logic)
          const list = getAllPresets().filter(p => p.id !== "none");
          const rnd = list[Math.floor(Math.random() * list.length)];
-         applyPreset(rnd.id);
+         
+         // applyPreset triggers updatePrompt(), which will now include the new loc/time
+         applyPreset(rnd.id); 
       });
 
       // Clear Scene Button
