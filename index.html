@@ -1262,24 +1262,45 @@ const basePresets = [
       });
 
       document.getElementById("randomPresetBtn").addEventListener("click", () => {
-         // 1. Randomize Location
+         // 1. Randomize Location (Expanded List)
          const randomLocations = [
-            "Tokyo, Japan", "New York City, USA", "Cairo, Egypt", "London, UK",
-            "Paris, France", "Reykjavik, Iceland", "Sydney, Australia", 
-            "Hong Kong", "Los Angeles, USA", "Berlin, Germany", 
-            "Seoul, South Korea", "Mexico City, Mexico", "Mumbai, India",
-            "Kyoto, Japan", "Marrakech, Morocco", "Havana, Cuba",
-            "35.6895° N, 139.6917° E", "40.7128° N, 74.0060° W", // Coordinates
-            "Antarctica", "Sahara Desert", "Amazon Rainforest", "The Swiss Alps"
+            // Major Metropolises
+            "Tokyo, Japan", "New York City, USA", "London, UK", "Paris, France", 
+            "Shanghai, China", "Mumbai, India", "São Paulo, Brazil", "Mexico City, Mexico",
+            "Cairo, Egypt", "Istanbul, Turkey", "Seoul, South Korea", "Los Angeles, USA",
+            "Berlin, Germany", "Dubai, UAE", "Singapore", "Hong Kong", "Barcelona, Spain",
+            "Toronto, Canada", "Sydney, Australia", "Buenos Aires, Argentina", "Chicago, USA",
+
+            // Cultural & Historic
+            "Kyoto, Japan", "Rome, Italy", "Petra, Jordan", "Machu Picchu, Peru",
+            "Marrakech, Morocco", "Havana, Cuba", "Venice, Italy", "Prague, Czech Republic",
+            "Athens, Greece", "Varanasi, India", "Cusco, Peru", "New Orleans, USA",
+            "Edinburgh, Scotland", "Lisbon, Portugal", "Cartagena, Colombia", "Chefchaouen, Morocco",
+
+            // Nature & Landscapes
+            "Reykjavik, Iceland", "Banff National Park, Canada", "Patagonia, Chile",
+            "The Sahara Desert", "Antarctica", "The Amazon Rainforest", "The Swiss Alps",
+            "Grand Canyon, USA", "Great Barrier Reef, Australia", "Serengeti National Park, Tanzania",
+            "Salar de Uyuni, Bolivia", "Mount Fuji, Japan", "Lake Como, Italy",
+            "The Maldives", "Santorini, Greece", "Yosemite National Park, USA",
+            "Highlands, Scotland", "Waitomo Caves, New Zealand", "Black Forest, Germany",
+
+            // Vibe / Specific
+            "Shinjuku, Tokyo (Neon District)", "Brooklyn, NY (Industrial Loft)",
+            "Abandoned Warehouse, Detroit", "Soho, London", "Copacabana Beach, Rio",
+            
+            // Coordinates
+            "35.6895° N, 139.6917° E", "40.7128° N, 74.0060° W", 
+            "30.0444° N, 31.2357° E", "-33.8688° S, 151.2093° E"
          ];
+         
          document.getElementById("location").value = randomLocations[Math.floor(Math.random() * randomLocations.length)];
 
          // 2. Randomize Date & Time (Between 1990 and 2030)
-         const start = new Date(1500, 0, 1).getTime();
+         const start = new Date(1990, 0, 1).getTime();
          const end = new Date(2030, 0, 1).getTime();
          const randomDate = new Date(start + Math.random() * (end - start));
          
-         // Format for datetime-local input (YYYY-MM-DDTHH:MM)
          const year = randomDate.getFullYear();
          const month = String(randomDate.getMonth() + 1).padStart(2, '0');
          const day = String(randomDate.getDate()).padStart(2, '0');
@@ -1287,12 +1308,11 @@ const basePresets = [
          const minute = String(randomDate.getMinutes()).padStart(2, '0');
          document.getElementById("datetime").value = `${year}-${month}-${day}T${hour}:${minute}`;
 
-         // 3. Randomize Preset (Existing Logic)
+         // 3. Randomize Preset
          const list = getAllPresets().filter(p => p.id !== "none");
          const rnd = list[Math.floor(Math.random() * list.length)];
          
-         // applyPreset triggers updatePrompt(), which will now include the new loc/time
-         applyPreset(rnd.id); 
+         applyPreset(rnd.id);
       });
 
       // Clear Scene Button
