@@ -360,16 +360,24 @@
             <!-- THE DROPDOWN LIST -->
             <div id="presetDropdown" class="hidden absolute z-[60] mt-2 w-full max-h-80 overflow-auto rounded-sm border border-studio-700 bg-studio-900 shadow-2xl"></div>
 
-            <!-- THE PREVIEW CARD (This is what was missing) -->
-            <div id="presetPreviewCard" class="hidden fixed right-10 bottom-10 w-64 bg-black border border-studio-600 p-1 shadow-[0_0_50px_rgba(79,70,229,0.5)] z-[9999] pointer-events-none transition-opacity duration-200">
+            
+           <!-- PREVIEW CARD (Responsive: Modal on Mobile, Corner on Desktop) -->
+            <div id="presetPreviewCard" class="hidden fixed z-[9999] transition-opacity duration-200 pointer-events-none md:pointer-events-none
+                 /* Mobile Styles: Centered Modal */
+                 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-sm bg-black border-2 border-studio-500 shadow-[0_0_100px_rgba(0,0,0,1)]
+                 /* Desktop Styles: Corner Floater */
+                 md:top-auto md:left-auto md:translate-x-0 md:translate-y-0 md:right-10 md:bottom-10 md:w-64 md:border md:border-studio-600 md:shadow-[0_0_50px_rgba(79,70,229,0.5)]">
+                
                 <div class="relative aspect-video bg-studio-800 overflow-hidden mb-2">
                     <img id="presetPreviewImg" src="" class="w-full h-full object-cover opacity-90" />
                     <div id="presetPreviewFallback" class="absolute inset-0 flex items-center justify-center text-[10px] text-studio-500 font-mono text-center p-2 hidden">NO PREVIEW</div>
                     <div class="absolute inset-0 bg-black opacity-20" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 1px, #000 1px, #000 2px);"></div>
                 </div>
-                <div class="px-2 pb-2 bg-studio-950">
-                    <div id="presetPreviewTitle" class="text-xs font-bold text-white uppercase tracking-wider mb-1 text-[var(--accent-color)]">Title</div>
-                    <div id="presetPreviewDesc" class="text-[9px] text-studio-400 font-mono leading-tight">Description text.</div>
+                <div class="px-3 pb-3 bg-studio-950">
+                    <div id="presetPreviewTitle" class="text-sm md:text-xs font-bold text-white uppercase tracking-wider mb-1 text-[var(--accent-color)]">Title</div>
+                    <div id="presetPreviewDesc" class="text-xs md:text-[9px] text-studio-400 font-mono leading-tight">Description text.</div>
+                    <!-- Mobile Only Close Hint -->
+                    <div class="md:hidden text-[9px] text-center text-studio-600 mt-2 border-t border-studio-800 pt-1 uppercase">Tap anywhere to close</div>
                 </div>
             </div>
           </div>
@@ -956,7 +964,7 @@ const basePresets = [
       const pInput = document.getElementById("presetSearch");
       
       function getAllPresets() { return [...basePresets, ...customPresets]; }
-function renderDropdown(filter = "") {
+      function renderDropdown(filter = "") {
         const pDrop = document.getElementById("presetDropdown");
         const pPreview = document.getElementById("presetPreviewCard");
         const pImg = document.getElementById("presetPreviewImg");
@@ -982,72 +990,87 @@ function renderDropdown(filter = "") {
             grouped[c].push(p);
         });
 
+        // --- PREVIEW LOADER FUNCTION ---
+        const showPreview = (preset) => {
+            // 1. Text
+            pTitle.innerText = preset.title;
+            pDesc.innerText = preset.desc;
+            
+            // 2. Image
+            pImg.style.display = 'none'; 
+            pFallback.classList.remove('hidden');
+            pFallback.innerText = "LOADING...";
+            const imagePath = `presets/${preset.id}.jpg`; // Ensure .jpg
+
+            pImg.onload = () => { pImg.style.display = 'block'; pFallback.classList.add('hidden'); };
+            pImg.onerror = () => { pImg.style.display = 'none'; pFallback.classList.remove('hidden'); pFallback.innerText = "NO PREVIEW"; };
+            pImg.src = imagePath;
+
+            // 3. Show
+            pPreview.classList.remove("hidden");
+        };
+
+        const hidePreview = () => {
+            pPreview.classList.add("hidden");
+        };
+
         Object.keys(grouped).sort().forEach(cat => {
             const header = document.createElement("div");
-            header.className = "px-3 py-2 text-[9px] font-bold text-studio-500 bg-studio-950 sticky top-0 border-b border-studio-800 uppercase tracking-wider";
+            header.className = "px-3 py-2 text-[9px] font-bold text-studio-500 bg-studio-950 sticky top-0 border-b border-studio-800 uppercase tracking-wider z-10";
             header.textContent = cat;
             pDrop.appendChild(header);
 
             grouped[cat].forEach(p => {
-                const btn = document.createElement("button");
-                btn.type = "button";
-                btn.className = "w-full text-left px-3 py-2 text-sm hover:bg-studio-800 transition border-b border-studio-800 last:border-0 group relative";
-                btn.innerHTML = `<div class="font-bold text-xs uppercase text-studio-200 group-hover:text-white tracking-wide">${p.title}</div><div class="text-[11px] text-studio-400 group-hover:text-studio-300 truncate font-mono">${p.desc}</div>`;
+                // ROW CONTAINER (Flexbox)
+                const row = document.createElement("div");
+                row.className = "flex w-full border-b border-studio-800 last:border-0 hover:bg-studio-800 transition group";
+
+                // 1. SELECT BUTTON (The Text)
+                const selectBtn = document.createElement("button");
+                selectBtn.type = "button";
+                selectBtn.className = "flex-1 text-left px-3 py-2 min-w-0";
+                selectBtn.innerHTML = `<div class="font-bold text-xs uppercase text-studio-200 group-hover:text-white tracking-wide truncate">${p.title}</div><div class="text-[11px] text-studio-400 group-hover:text-studio-300 truncate font-mono">${p.desc}</div>`;
                 
-                // --- HOVER LOGIC START ---
-                // --- SIMPLE HOVER LOGIC (PNG ONLY) ---
-                btn.addEventListener("mouseenter", () => {
-                    // 1. Fill Text
-                    pTitle.innerText = p.title;
-                    pDesc.innerText = p.desc;
-
-                    // 2. Set Image Source
-                    // Reset display states
-                    pImg.style.display = 'none'; 
-                    pFallback.classList.remove('hidden');
-                    pFallback.innerText = "LOADING...";
-
-                    // Define the specific path
-                    const imagePath = `presets/${p.id}.jpg`;
-
-                    pImg.onload = () => {
-                        // Image loaded successfully
-                        pImg.style.display = 'block';
-                        pFallback.classList.add('hidden');
-                    };
-
-                    pImg.onerror = () => {
-                        // Image failed to load (missing file or wrong name)
-                        pImg.style.display = 'none';
-                        pFallback.classList.remove('hidden');
-                        pFallback.innerText = "NO PREVIEW";
-                    };
-
-                    // Load it
-                    pImg.src = imagePath;
-
-                    // 3. Show Card
-                    pPreview.classList.remove("hidden");
-                });
-
-                btn.addEventListener("mouseleave", () => {
-                    pPreview.classList.add("hidden");
-                });
-                // --- HOVER LOGIC END ---
-
-                btn.addEventListener("click", () => {
+                selectBtn.addEventListener("click", () => {
                     applyPreset(p.id);
                     pDrop.classList.add("hidden");
-                    pPreview.classList.add("hidden"); // Hide preview on click
+                    hidePreview();
                 });
-                pDrop.appendChild(btn);
+
+                // Desktop Hover on Text also triggers preview (Optional, keeping consistent behavior)
+                selectBtn.addEventListener("mouseenter", () => { if(window.innerWidth >= 768) showPreview(p); });
+                selectBtn.addEventListener("mouseleave", () => { if(window.innerWidth >= 768) hidePreview(); });
+
+                // 2. PREVIEW BUTTON (The Eye Icon) - Visible/Touchable on Mobile
+                const eyeBtn = document.createElement("button");
+                eyeBtn.type = "button";
+                eyeBtn.className = "px-4 flex items-center justify-center text-studio-500 hover:text-white hover:bg-studio-700 border-l border-studio-800 transition";
+                eyeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+                
+                // CLICKING THE EYE (Mobile/Desktop)
+                eyeBtn.addEventListener("click", (e) => {
+                    e.stopPropagation(); // Don't close dropdown
+                    e.preventDefault();
+                    showPreview(p);
+                });
+
+                row.appendChild(selectBtn);
+                row.appendChild(eyeBtn);
+                pDrop.appendChild(row);
             });
         });
         
-        // Hide preview if mouse leaves the entire dropdown area
-        pDrop.addEventListener("mouseleave", () => {
-            pPreview.classList.add("hidden");
-        });
+        // Mobile: Tap anywhere on screen (outside preview) to close preview
+        // We use a global listener that we attach once
+        if (!window.mobilePreviewListenerAttached) {
+            document.addEventListener('click', (e) => {
+               // If clicking outside the preview card AND the dropdown...
+               if (!pPreview.contains(e.target) && !e.target.closest('button')) {
+                   pPreview.classList.add("hidden");
+               }
+            });
+            window.mobilePreviewListenerAttached = true;
+        }
       }
 
       // --- Apply Preset ---
