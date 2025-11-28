@@ -171,36 +171,85 @@
   <div id="ambientGlow" class="fixed inset-0 z-[-1] pointer-events-none opacity-20" style="background: radial-gradient(circle at 50% -20%, var(--glow-color), transparent 70%);"></div>
   <div id="topBar" class="h-0.5 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 sticky top-0 z-50 transition-colors duration-1000 opacity-50"></div>
 
-  <!-- SYSTEM TICKER / MARQUEE -->
-  <div class="w-full bg-[#050505] border-b border-studio-800 overflow-hidden py-2 relative z-40">
-    <div class="marquee-track whitespace-nowrap">
-      <div class="marquee-content inline-block text-[10px] font-mono text-studio-400 font-bold uppercase tracking-widest">
-        <span class="text-[var(--accent-color)]">:: SYSTEM UPDATE v8.9 ::</span> MIDJOURNEY v7 & FLUX.2 LOGIC APPLIED
-        <span class="text-studio-700 mx-4">///</span>
-        <span class="text-yellow-600">⚠️ NOTICE:</span> PRESET PREVIEWS ARE A WORK IN PROGRESS (NOT ALL UPLOADED YET)
-        <span class="text-studio-700 mx-4">///</span>
-        SUPPORT DEVELOPMENT: 
-        <a href="https://buymeacoffee.com/fdashstop" target="_blank" class="text-studio-200 hover:text-yellow-400 underline decoration-studio-700 underline-offset-4 transition-colors">BUY A COFFEE</a>
-        <span class="mx-1">OR</span>
-        <a href="https://buymeacoffee.com/fdashstop/membership" target="_blank" class="text-studio-200 hover:text-[var(--accent-color)] underline decoration-studio-700 underline-offset-4 transition-colors">BECOME A MEMBER</a>
-        <span class="text-studio-700 mx-4">///</span>
-        THANKS FOR CREATING WITH F-STOP
+  <!-- SYSTEM TICKER / MARQUEE (FINAL) -->
+  <div class="w-full bg-black/60 backdrop-blur-md border-b border-white/10 overflow-hidden py-2.5 relative z-40">
+    
+    <!-- Gradient Fade Masks -->
+    <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#050505] to-transparent z-10 pointer-events-none"></div>
+    <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[#050505] to-transparent z-10 pointer-events-none"></div>
+
+    <div class="marquee-track whitespace-nowrap flex items-center">
+      <div class="marquee-content inline-flex items-center gap-8 text-[10px] font-mono font-bold uppercase tracking-widest text-studio-400">
+        
+        <!-- 1. SYSTEM UPDATE -->
+        <span class="flex items-center gap-2 text-white">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+            </span>
+            <span class="text-indigo-400">v8.9 ACTIVE:</span> MIDJOURNEY v7 & FLUX.2 LOGIC APPLIED
+        </span>
+
+        <span class="text-studio-700 opacity-50 text-[8px]">////////////////</span>
+
+        <!-- 2. NEW FEATURE ALERT (Added this) -->
+        <span class="flex items-center gap-2 text-emerald-400">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" /></svg>
+            NEW: "TUNING RACK" ADDED TO STYLE ENGINE
+        </span>
+
+        <span class="text-studio-700 opacity-50 text-[8px]">////////////////</span>
+
+        <!-- 3. SUPPORT DEV -->
+        <span class="flex items-center gap-3">
+            <span>SUPPORT ME:</span>
+            <a href="https://buymeacoffee.com/fdashstop" target="_blank" class="flex items-center gap-1.5 text-white hover:text-yellow-400 transition-colors group">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3 text-studio-500 group-hover:text-yellow-400"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg>
+                BUY COFFEE
+            </a>
+            <span class="w-px h-3 bg-studio-700"></span>
+            <a href="https://buymeacoffee.com/fdashstop/membership" target="_blank" class="flex items-center gap-1.5 text-white hover:text-indigo-400 transition-colors group">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3 text-studio-500 group-hover:text-indigo-400"><path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" /></svg>
+                BECOME MEMBER
+            </a>
+        </span>
+
+        <span class="text-studio-700 opacity-50 text-[8px]">////////////////</span>
+
+        <!-- 4. SOCIAL CALL (Added this) -->
+        <span class="text-studio-300">
+            TAG <span class="text-white font-bold">#FSTOP</span> ON X.COM TO BE FEATURED
+        </span>
+
+        <span class="text-studio-700 opacity-50 text-[8px]">////////////////</span>
+
+        <!-- 5. WARNING -->
+        <span class="flex items-center gap-2 text-yellow-500/90">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg>
+            NOTE: PRESET PREVIEWS ARE UPLOADING DAILY
+        </span>
+
+        <span class="text-studio-700 opacity-50 text-[8px]">////////////////</span>
+
+        <span>THANKS FOR CREATING WITH <span class="text-white">F-STOP</span></span>
+
       </div>
     </div>
   </div>
 
   <style>
-    /* Marquee Animation */
     .marquee-track {
       width: 100%;
       overflow: hidden;
+      mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
     }
     .marquee-content {
-      padding-left: 100%; /* Start off-screen right */
-      animation: marquee-scroll 25s linear infinite;
+      padding-left: 100%;
+      animation: marquee-scroll 45s linear infinite; /* Slowed down slightly for more content */
     }
     .marquee-content:hover {
-      animation-play-state: paused; /* Pauses when user hovers to click links */
+      animation-play-state: paused;
     }
     @keyframes marquee-scroll {
       0% { transform: translateX(0); }
