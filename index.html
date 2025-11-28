@@ -171,7 +171,7 @@
   <div id="ambientGlow" class="fixed inset-0 z-[-1] pointer-events-none opacity-20" style="background: radial-gradient(circle at 50% -20%, var(--glow-color), transparent 70%);"></div>
   <div id="topBar" class="h-0.5 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 sticky top-0 z-50 transition-colors duration-1000 opacity-50"></div>
 
-  <!-- SYSTEM TICKER / MARQUEE (FINAL) -->
+  <!-- SYSTEM TICKER / MARQUEE (UPDATED v1.2) -->
   <div class="w-full bg-black/60 backdrop-blur-md border-b border-white/10 overflow-hidden py-2.5 relative z-40">
     
     <!-- Gradient Fade Masks -->
@@ -192,10 +192,10 @@
 
         <span class="text-studio-700 opacity-50 text-[8px]">////////////////</span>
 
-        <!-- 2. NEW FEATURE ALERT (Added this) -->
+        <!-- 2. NEW FEATURES (Updated) -->
         <span class="flex items-center gap-2 text-emerald-400">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" /></svg>
-            NEW: "TUNING RACK" ADDED TO STYLE ENGINE
+            NEW TOOLS: REFERENCE MODULE (--SREF), NEGATIVE PROMPTS & TUNING RACK
         </span>
 
         <span class="text-studio-700 opacity-50 text-[8px]">////////////////</span>
@@ -216,14 +216,14 @@
 
         <span class="text-studio-700 opacity-50 text-[8px]">////////////////</span>
 
-        <!-- 4. SOCIAL CALL (Added this) -->
+        <!-- 4. SOCIAL CALL -->
         <span class="text-studio-300">
             TAG <span class="text-white font-bold">#FSTOP</span> ON X.COM TO BE FEATURED
         </span>
 
         <span class="text-studio-700 opacity-50 text-[8px]">////////////////</span>
 
-        <!-- 5. WARNING -->
+        <!-- 5. NOTE -->
         <span class="flex items-center gap-2 text-yellow-500/90">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg>
             NOTE: PRESET PREVIEWS ARE UPLOADING DAILY
@@ -246,7 +246,7 @@
     }
     .marquee-content {
       padding-left: 100%;
-      animation: marquee-scroll 45s linear infinite; /* Slowed down slightly for more content */
+      animation: marquee-scroll 45s linear infinite;
     }
     .marquee-content:hover {
       animation-play-state: paused;
@@ -317,6 +317,9 @@
               <label for="location" class="hardware-label block mb-2">Location / Coordinates</label>
               <input type="text" id="location" class="w-full hardware-screen rounded-sm text-xs text-white p-2.5 focus:border-indigo-500 outline-none placeholder-studio-700" placeholder="e.g., Cairo, Egypt or 30.0444, 31.2357" />
             </div>
+
+            
+
             <div>
               <label for="datetime" class="hardware-label block mb-2">Date & Time</label>
               <div class="relative group w-full">
@@ -430,9 +433,38 @@
                 </div>
                 <textarea id="customVibe" rows="1" class="w-full hardware-screen rounded-sm p-2 text-[10px] text-white outline-none focus:border-indigo-500" placeholder="OPTIONAL NOTES..."></textarea>
                 <div id="saveStatus" class="text-[10px] text-green-500 mt-1 font-mono leading-tight min-h-[1em]"></div>
+             </div> <!-- Close Save Config Inner -->
+          </details> <!-- Close Save Config Details -->
+        </div> <!-- Close Save Config Wrapper -->
+      </div> <!-- Close Style Engine Panel -->
+
+      <!-- REFERENCE & CONSTRAINTS MODULE (Forced New Block) -->
+      <div class="hardware-panel rounded-md p-4 mt-6 mb-6 relative z-10 block">
+           <div class="flex justify-between items-center mb-3">
+              <span class="hardware-label text-studio-300">Reference & Constraints</span>
+              <button id="clearRefBtn" type="button" class="text-[9px] text-studio-500 hover:text-white uppercase font-bold transition-colors">Clear</button>
+           </div>
+           
+           <div class="space-y-3">
+            <div id="srefContainer" class="group relative">
+                 <label class="text-[9px] text-studio-500 font-mono font-bold tracking-wider block mb-1.5 flex justify-between">
+                    <span>IMAGE REF URL <span class="text-indigo-400">(--sref)</span></span>
+                    <span class="text-[8px] text-studio-600">HTTPS://...</span>
+                 </label>
+                 <input type="text" id="srefUrl" class="w-full hardware-screen rounded-sm p-2.5 text-[10px] text-indigo-300 outline-none focus:border-indigo-500 placeholder-studio-700 font-mono transition-colors" placeholder="Paste image URL here..." />
+                 <!-- Active Indicator Dot -->
+                 <div class="absolute right-2 top-8 w-1.5 h-1.5 rounded-full bg-indigo-500 opacity-0 transition-opacity" id="srefDot"></div>
               </div>
-            </details>
-          </div>
+
+              <!-- Negative Prompt Input -->
+              <div class="group">
+                 <label class="text-[9px] text-studio-500 font-mono font-bold tracking-wider block mb-1.5 flex justify-between">
+                    <span>NEGATIVE PROMPT <span class="text-red-400">(--no)</span></span>
+                    <span class="text-[8px] text-studio-600">EXCLUDE ITEMS</span>
+                 </label>
+                 <input type="text" id="negativePrompt" class="w-full hardware-screen rounded-sm p-2.5 text-[10px] text-red-300 outline-none focus:border-red-500 placeholder-studio-700 font-mono transition-colors" placeholder="e.g. cars, text, blur, crowds, red color" />
+              </div>
+           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1227,14 +1259,12 @@ function renderDropdown(filter = "") {
           return "standard aspect ratio";
       }
 
-      // --- Update Prompt Function (Complete & Fixed) ---
+      // --- Update Prompt Function (Updated with Ref & Constraints) ---
       function updatePrompt() {
-        // 1. Helper to get values
         const getVal = (id) => { const el = document.getElementById(id); return el ? el.value : ""; };
         
-        // 2. Gather Basic Data
+        // --- 1. Gather Data ---
         const scene = getVal("scene").trim() || "a compelling photography scene";
-        
         const locationVal = getVal("location").trim();
         const datetimeVal = getVal("datetime");
         let locationPart = locationVal ? ` at ${locationVal}` : "";
@@ -1256,25 +1286,19 @@ function renderDropdown(filter = "") {
         const film = getVal("film");
         const lighting = getVal("lighting");
         const composition = getVal("composition");
-        const styleName = document.getElementById("photographerStyle").value;
         const vibe = activePresetVibe;
+        
+        // --- 2. New Inputs (Ref & Negatives) ---
+        const srefUrl = getVal("srefUrl").trim();
+        const userNeg = getVal("negativePrompt").trim();
+        
+        // UI Feedback: Show dot if URL exists
+        const srefDot = document.getElementById("srefDot");
+        if(srefDot) srefDot.style.opacity = srefUrl ? "1" : "0";
 
-        // --- UI VISIBILITY LOGIC ---
-        const tuningRack = document.getElementById("midjourneyTuningRack");
-        if(tuningRack) {
-            if(activeModel === "midjourney") {
-                tuningRack.classList.remove("hidden");
-            } else {
-                tuningRack.classList.add("hidden");
-            }
-        }
-        
-        // 3. --- DYNAMIC PHYSICS TRANSLATORS (Research Verified) ---
-        // Translate Numbers -> Visual Descriptions
-        
-        // ISO Translation
+        // --- 3. Dynamic Physics Translators ---
         const isoNum = parseInt(iso) || 0;
-        let isoDesc = ""; // Empty by default
+        let isoDesc = "";
         if (iso !== "None") {
             if (isoNum <= 100) isoDesc = "pristine, noise-free, crystal clear, smooth gradation";
             else if (isoNum >= 800 && isoNum < 3200) isoDesc = "noticeable film grain, analog texture";
@@ -1282,7 +1306,6 @@ function renderDropdown(filter = "") {
             else isoDesc = "authentic texture";
         }
 
-        // Lens Character Translation
         const lensCharMap = {
             "None": "standard optical clarity",
             "Clinical Sharp": "razor sharp edge-to-edge, high micro-contrast, zero distortion",
@@ -1295,14 +1318,14 @@ function renderDropdown(filter = "") {
         };
         const lensCharDesc = lensCharMap[getVal("lensChar")] || "";
 
-        // 4. Update LCD Screen
+        // --- 4. LCD Update ---
         const lcdSafe = (val) => (val && val !== "None") ? val : "--";
         document.getElementById("lcd-shutter").innerText = lcdSafe(shutter);
         document.getElementById("lcd-aperture").innerText = lcdSafe(aperture);
         document.getElementById("lcd-iso").innerText = (iso && iso !== "None") ? iso : "--";
         document.getElementById("lcd-focal").innerText = (focal && focal !== "mm") ? focal.replace("mm","") : "--";
 
-        // 5. Build String Components
+        // --- 5. Build Parts ---
         let techParts = [];
         if(aperture !== "None") techParts.push(aperture);
         if(shutter !== "None") techParts.push(shutter);
@@ -1313,7 +1336,6 @@ function renderDropdown(filter = "") {
         if(film !== "None") moodParts.push(film);
         if(getVal("wb") !== "None") moodParts.push(getVal("wb"));
         if(getVal("grain") !== "None") moodParts.push(getVal("grain"));
-        // We do NOT push lensChar here blindly anymore; we use the descriptive variable in the prompt blocks
         const moodString = moodParts.join(", ");
         
         const lightingNotes = Array.from(activeLightingSetups).join(", ");
@@ -1323,71 +1345,74 @@ function renderDropdown(filter = "") {
         let promptGrit = "";
         let promptProd = "";
 
-        // --- 6. MODEL LOGIC (Midjourney v7 / Flux.2 / Chat) ---
+  
+        // --- UI VISIBILITY LOGIC ---
+        const tuningRack = document.getElementById("midjourneyTuningRack");
+        const srefContainer = document.getElementById("srefContainer");
+        
+        if (activeModel === "midjourney") {
+            // Show MJ-specific tools
+            if(tuningRack) tuningRack.classList.remove("hidden");
+            if(srefContainer) srefContainer.classList.remove("hidden");
+        } else {
+            // Hide MJ-specific tools for Flux/GPT
+            if(tuningRack) tuningRack.classList.add("hidden");
+            if(srefContainer) srefContainer.classList.add("hidden");
+        }
+
+        // --- 7. Model Logic ---
 
         if (activeModel === "midjourney") {
-            // --- MIDJOURNEY v7 (TUNED) ---
-            
+            // MJ v7 Logic
             let blocks = [];
-            
-            // Para 1: Narrative
             blocks.push(`${scene}${locationPart}${datetimePart}. ${genre} photography.`);
-            
-            // Para 2: Specs
             blocks.push(`Shot on ${cam} with a ${lens} lens at ${focal}. Settings: ${techString || "Auto"}.`);
             
-            // Para 3: Atmosphere
             let styleBlock = [];
             if(lighting !== "None") styleBlock.push(lighting);
             if(lightingNotes) styleBlock.push(lightingNotes);
             if(moodString) styleBlock.push(moodString);
-
             if(isoDesc) styleBlock.push(isoDesc); 
             if(getVal("lensChar") !== "None") styleBlock.push(lensCharDesc);
-            
             if(vibe) styleBlock.push(vibe);
             if(styleBlock.length > 0) blocks.push(styleBlock.join(", "));
 
             let coreText = blocks.join(".\n\n"); 
             
-            // --- TUNING RACK LOGIC ---
-            // 1. Get Values from Sliders
+            // --- PARAMS CONSTRUCTION ---
+            // 1. Negatives (Base + User)
+            let baseNegs = "illustration, 3d render, painting, drawing, cgi, text, watermark, smooth skin";
+            if(userNeg) baseNegs += `, ${userNeg}`;
+            const finalNegs = ` --no ${baseNegs}`;
+
+            // 2. SREF
+            const finalSref = srefUrl ? ` --sref ${srefUrl}` : "";
+
+            // 3. Tuning Sliders
             const sVal = document.getElementById("paramStylize") ? document.getElementById("paramStylize").value : "150";
             const cVal = document.getElementById("paramChaos") ? document.getElementById("paramChaos").value : "0";
             const wVal = document.getElementById("paramWeird") ? document.getElementById("paramWeird").value : "0";
-
-            // 2. Update UI Labels (Live Feedback)
-            if(document.getElementById("val-stylize")) document.getElementById("val-stylize").innerText = sVal;
-            if(document.getElementById("val-chaos")) document.getElementById("val-chaos").innerText = cVal;
-            if(document.getElementById("val-weird")) document.getElementById("val-weird").innerText = wVal;
-
-            // 3. Build Param Strings
-            const negatives = " --no illustration, 3d render, painting, drawing, cgi, text, watermark, smooth skin";
             
-            // Base params (Version + Style)
-            let baseParams = " --v 7 --style raw";
-            
-            // Add Chaos & Weird (Apply to ALL outputs)
+            let baseParams = ` --v 7 --style raw`;
             if(cVal > 0) baseParams += ` --c ${cVal}`;
             if(wVal > 0) baseParams += ` --w ${wVal}`;
 
-            // Master Prompt uses the SLIDER value for Stylize
+            // Master
             const masterParams = baseParams + ` --s ${sVal}`;
             
-            promptMain = coreText + "\n\n" + masterParams + negatives + activeAR;
+            // Combine
+            const extras = finalSref + finalNegs + activeAR;
+
+            promptMain = coreText + "\n\n" + masterParams + extras;
             
-            // Variations use OPINIONATED Stylize values (but keep user's chaos/weird)
-            promptCine = coreText + "\n\nCinematic color grading, teal and orange, IMAX quality, atmospheric depth." + baseParams + " --s 250" + negatives + activeAR;
-            promptGrit = coreText + "\n\nTactile texture, micro-contrast, raw documentary aesthetic, unpolished." + baseParams + " --s 50" + negatives + activeAR; 
-            promptProd = coreText + "\n\nCommercial studio lighting, advertising standard, 8k resolution, sharp focus." + baseParams + " --s 400" + negatives + activeAR;
+            // Variations
+            promptCine = coreText + "\n\nCinematic color grading, teal and orange, IMAX quality." + baseParams + " --s 250" + extras;
+            promptGrit = coreText + "\n\nTactile texture, micro-contrast, raw documentary aesthetic." + baseParams + " --s 50" + extras; 
+            promptProd = coreText + "\n\nCommercial studio lighting, advertising standard, 8k resolution." + baseParams + " --s 400" + extras;
 
         } else if (activeModel === "flux") {
-            // --- FLUX.2 STRATEGY ---
-
-            // Para 1: Subject
+            // Flux.2 Logic
             let p1 = `${scene}${locationPart}${datetimePart}. The image is a ${genre} photograph.`;
-            
-            // Para 2: Physics Translation
             let p2 = `Captured on a ${cam} using a ${lens} lens set to ${focal || "35mm"}.`;
             if(aperture && aperture !== "None") {
                 const isWide = aperture.includes('1.2') || aperture.includes('1.4') || aperture.includes('1.8') || aperture.includes('2.8');
@@ -1395,17 +1420,17 @@ function renderDropdown(filter = "") {
             }
             if(shutter && shutter !== "None") p2 += ` Shutter speed ${shutter} to control motion blur.`;
             
-            // Para 3: Vibe
             let p3 = [];
             if(lighting !== "None") p3.push(`Lighting configuration: ${lighting}${lightingNotes ? ` featuring ${lightingNotes}` : ""}.`);
             if(moodString) p3.push(`Visual characteristics: ${moodString}.`);
             if(vibe) p3.push(`Vibe: ${vibe}.`);
             
-            // Para 4: Texture Force
-            // We use the Dynamic Descriptions here
             let isoText = isoDesc ? `, ${isoDesc}` : "";
             let lensText = lensCharDesc ? `, ${lensCharDesc}` : "";
             let p4 = `Texture Quality: High fidelity${isoText}${lensText}, raw sensor data, uncompressed.`;
+
+            // Append Negatives naturally
+            if(userNeg) p4 += `\nExclude: ${userNeg}.`;
 
             let core = [p1, p2, p3.join(" "), p4].join("\n\n");
             
@@ -1415,11 +1440,9 @@ function renderDropdown(filter = "") {
             promptProd = core + "\n\nLook: Luxury advertising, macro contrast, specular highlights, clean background.";
 
         } else if (activeModel === "dalle") {
-            // --- GPT / NanoBanana STRATEGY ---
-            
+            // GPT Logic
             let header = "GENERATE A PHOTOREALISTIC IMAGE BASED ON THESE SPECIFICATIONS:\n\n";
             
-            // Using Dynamic Descriptions in DataBlock
             let dataBlock = `SUBJECT: ${scene}${locationPart}${datetimePart}
 CAMERA: ${cam}
 LENS: ${lens} (${focal}) ${lensCharDesc ? `-> Look: ${lensCharDesc}` : ""}
@@ -1427,7 +1450,8 @@ LIGHTING: ${lighting} (${lightingNotes})
 ISO/TEXTURE: ${iso} ${isoDesc ? `(${isoDesc})` : ""}
 STYLE: ${moodString}
 VIBE: ${vibe}
-COMPOSITION: ${composition}`;
+COMPOSITION: ${composition}
+${userNeg ? `AVOID/EXCLUDE: ${userNeg}` : ""}`;
 
             let instructions = `\n\nCRITICAL INSTRUCTIONS:
 1. Visualize the scene using the optical characteristics of the ${lens} (DOF, distortion).
@@ -1444,16 +1468,14 @@ COMPOSITION: ${composition}`;
             promptProd = core + "\n\nSTYLE: Commercial advertising standard, perfect studio lighting, 8k.";
         }
 
-        // 7. Output to Textareas
+        // 8. Output
         const cleanAndFormat = (s) => s.replace(/\.\./g, ".").replace(/,,/g, ",").replace(/ +/g, " ").trim();
-        
         document.getElementById("outMain").value = cleanAndFormat(promptMain);
         document.getElementById("outCine").value = cleanAndFormat(promptCine);
         document.getElementById("outGrit").value = cleanAndFormat(promptGrit);
         document.getElementById("outProd").value = cleanAndFormat(promptProd);
         document.getElementById("outLLM").value = ""; 
 
-        // 8. Update UI Ambience
         updateAmbiance();
       }
 
@@ -1820,6 +1842,22 @@ COMPOSITION: ${composition}`;
               document.getElementById("paramStylize").value = 150;
               document.getElementById("paramChaos").value = 0;
               document.getElementById("paramWeird").value = 0;
+              updatePrompt();
+          });
+      }
+
+      // Reference & Constraints Listeners
+      ["srefUrl", "negativePrompt"].forEach(id => {
+          const el = document.getElementById(id);
+          if(el) el.addEventListener("input", updatePrompt);
+      });
+
+      // Clear Ref Button
+      const clearRefBtn = document.getElementById("clearRefBtn");
+      if(clearRefBtn) {
+          clearRefBtn.addEventListener("click", () => {
+              document.getElementById("srefUrl").value = "";
+              document.getElementById("negativePrompt").value = "";
               updatePrompt();
           });
       }
