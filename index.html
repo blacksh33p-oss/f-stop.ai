@@ -171,6 +171,43 @@
   <div id="ambientGlow" class="fixed inset-0 z-[-1] pointer-events-none opacity-20" style="background: radial-gradient(circle at 50% -20%, var(--glow-color), transparent 70%);"></div>
   <div id="topBar" class="h-0.5 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 sticky top-0 z-50 transition-colors duration-1000 opacity-50"></div>
 
+  <!-- SYSTEM TICKER / MARQUEE -->
+  <div class="w-full bg-[#050505] border-b border-studio-800 overflow-hidden py-2 relative z-40">
+    <div class="marquee-track whitespace-nowrap">
+      <div class="marquee-content inline-block text-[10px] font-mono text-studio-400 font-bold uppercase tracking-widest">
+        <span class="text-[var(--accent-color)]">:: SYSTEM UPDATE v8.9 ::</span> MIDJOURNEY v7 & FLUX.2 LOGIC APPLIED
+        <span class="text-studio-700 mx-4">///</span>
+        <span class="text-yellow-600">⚠️ NOTICE:</span> PRESET PREVIEWS ARE A WORK IN PROGRESS (NOT ALL UPLOADED YET)
+        <span class="text-studio-700 mx-4">///</span>
+        SUPPORT DEVELOPMENT: 
+        <a href="https://buymeacoffee.com/fdashstop" target="_blank" class="text-studio-200 hover:text-yellow-400 underline decoration-studio-700 underline-offset-4 transition-colors">BUY A COFFEE</a>
+        <span class="mx-1">OR</span>
+        <a href="https://buymeacoffee.com/fdashstop/membership" target="_blank" class="text-studio-200 hover:text-[var(--accent-color)] underline decoration-studio-700 underline-offset-4 transition-colors">BECOME A MEMBER</a>
+        <span class="text-studio-700 mx-4">///</span>
+        THANKS FOR CREATING WITH F-STOP
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Marquee Animation */
+    .marquee-track {
+      width: 100%;
+      overflow: hidden;
+    }
+    .marquee-content {
+      padding-left: 100%; /* Start off-screen right */
+      animation: marquee-scroll 25s linear infinite;
+    }
+    .marquee-content:hover {
+      animation-play-state: paused; /* Pauses when user hovers to click links */
+    }
+    @keyframes marquee-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+  </style>
+
   <div class="max-w-7xl mx-auto w-full p-4 md:p-8 flex-grow">
     <header class="mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-studio-800 pb-6">
       <div>
