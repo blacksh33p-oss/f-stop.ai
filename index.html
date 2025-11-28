@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>f-stop.ai | Professional AI Scene & Prompt Director</title>
 
-  <meta name="description" content="Master your AI photography. Convert camera settings (Aperture, ISO, Film Stock) and directorial vision into flawless prompts for Midjourney, Flux, and DALL-E 3." />
-  <meta name="keywords" content="AI, Midjourney, Flux, DALL-E, prompt engineering, photography, cinematography, generative AI, nanobanana, chatgpt" />
+  <meta name="description" content="Master your AI photography art. Convert camera settings (Aperture, ISO, Film Stock) and directorial vision into flawless prompts for Midjourney, Flux, and DALL-E 3." />
+  <meta name="keywords" content="AI, Midjourney, Flux, DALL-E, prompt engineering, photography, cinematography, generative AI, gpt, chatgpt, nanobanana" />
   <meta property="og:title" content="f-stop.ai | Professional AI Scene & Prompt Director" />
   <meta property="og:description" content="Generate cinematic, photorealistic prompts with true camera physics." />
   <meta property="og:type" content="website" />
@@ -257,7 +257,7 @@
             <button id="randomPresetBtn" type="button" class="text-[10px] uppercase tracking-wider hover:text-white transition flex items-center gap-1 font-bold" style="color: var(--accent-color)">Randomize</button>
           </div>
           
-          <div id="presetComboWrap" class="relative">
+          <div id="presetComboWrap" class="relative group">
             <div class="flex gap-2">
               <div class="relative flex-1 group min-w-0">
                 <input id="presetSearch" type="text" class="w-full hardware-screen rounded-sm pl-4 pr-4 py-2.5 text-xs text-white transition truncate placeholder-studio-700 focus:border-indigo-500" placeholder="SEARCH PRESETS..." autocomplete="off" />
@@ -265,7 +265,22 @@
               <button id="browsePresetBtn" type="button" class="shrink-0 px-4 rounded-sm bg-studio-800 hover:bg-studio-700 text-[10px] uppercase font-bold text-studio-400 border border-studio-700 transition">Browse</button>
               <button id="clearPresetBtn" type="button" class="shrink-0 px-4 rounded-sm bg-studio-800 hover:bg-studio-700 text-[10px] uppercase font-bold text-studio-400 border border-studio-700 transition">Clear</button>
             </div>
+            
+            <!-- THE DROPDOWN LIST -->
             <div id="presetDropdown" class="hidden absolute z-[60] mt-2 w-full max-h-80 overflow-auto rounded-sm border border-studio-700 bg-studio-900 shadow-2xl"></div>
+
+            <!-- THE PREVIEW CARD (This is what was missing) -->
+            <div id="presetPreviewCard" class="hidden fixed right-10 bottom-10 w-64 bg-black border border-studio-600 p-1 shadow-[0_0_50px_rgba(79,70,229,0.5)] z-[9999] pointer-events-none transition-opacity duration-200">
+                <div class="relative aspect-video bg-studio-800 overflow-hidden mb-2">
+                    <img id="presetPreviewImg" src="" class="w-full h-full object-cover opacity-90" />
+                    <div id="presetPreviewFallback" class="absolute inset-0 flex items-center justify-center text-[10px] text-studio-500 font-mono text-center p-2 hidden">NO PREVIEW</div>
+                    <div class="absolute inset-0 bg-black opacity-20" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 1px, #000 1px, #000 2px);"></div>
+                </div>
+                <div class="px-2 pb-2 bg-studio-950">
+                    <div id="presetPreviewTitle" class="text-xs font-bold text-white uppercase tracking-wider mb-1 text-[var(--accent-color)]">Title</div>
+                    <div id="presetPreviewDesc" class="text-[9px] text-studio-400 font-mono leading-tight">Description text.</div>
+                </div>
+            </div>
           </div>
           
           <div id="presetInfo" class="mt-3 p-3 rounded-sm bg-black/20 border border-white/5 text-xs font-mono text-studio-300 hidden leading-relaxed"></div>
@@ -375,8 +390,8 @@
         <div class="sticky top-6 space-y-4">
           <div class="flex justify-center mb-2">
              <div class="flex bg-studio-900 border border-studio-700 rounded-sm p-1 gap-1">
-                <button type="button" data-model="midjourney" class="model-btn active px-3 py-1 text-[9px] font-bold uppercase text-studio-400 hover:text-white rounded-sm transition">Midjourney</button>
-                <button type="button" data-model="flux" class="model-btn px-3 py-1 text-[9px] font-bold uppercase text-studio-400 hover:text-white rounded-sm transition">Flux</button>
+                <button type="button" data-model="midjourney" class="model-btn active px-3 py-1 text-[9px] font-bold uppercase text-studio-400 hover:text-white rounded-sm transition">Midjourney v7</button>
+                <button type="button" data-model="flux" class="model-btn px-3 py-1 text-[9px] font-bold uppercase text-studio-400 hover:text-white rounded-sm transition">Flux.2</button>
                 <button type="button" data-model="dalle" class="model-btn px-3 py-1 text-[9px] font-bold uppercase text-studio-400 hover:text-white rounded-sm transition">GPT / Nano Banana</button>
              </div>
           </div>
@@ -760,8 +775,14 @@ const basePresets = [
       const pInput = document.getElementById("presetSearch");
       
       function getAllPresets() { return [...basePresets, ...customPresets]; }
+function renderDropdown(filter = "") {
+        const pDrop = document.getElementById("presetDropdown");
+        const pPreview = document.getElementById("presetPreviewCard");
+        const pImg = document.getElementById("presetPreviewImg");
+        const pFallback = document.getElementById("presetPreviewFallback");
+        const pTitle = document.getElementById("presetPreviewTitle");
+        const pDesc = document.getElementById("presetPreviewDesc");
 
-      function renderDropdown(filter = "") {
         pDrop.innerHTML = "";
         const ft = filter.toLowerCase();
         const list = getAllPresets().filter(p => 
@@ -789,14 +810,62 @@ const basePresets = [
             grouped[cat].forEach(p => {
                 const btn = document.createElement("button");
                 btn.type = "button";
-                btn.className = "w-full text-left px-3 py-2 text-sm hover:bg-studio-800 transition border-b border-studio-800 last:border-0 group";
+                btn.className = "w-full text-left px-3 py-2 text-sm hover:bg-studio-800 transition border-b border-studio-800 last:border-0 group relative";
                 btn.innerHTML = `<div class="font-bold text-xs uppercase text-studio-200 group-hover:text-white tracking-wide">${p.title}</div><div class="text-[11px] text-studio-400 group-hover:text-studio-300 truncate font-mono">${p.desc}</div>`;
+                
+                // --- HOVER LOGIC START ---
+                // --- SIMPLE HOVER LOGIC (PNG ONLY) ---
+                btn.addEventListener("mouseenter", () => {
+                    // 1. Fill Text
+                    pTitle.innerText = p.title;
+                    pDesc.innerText = p.desc;
+
+                    // 2. Set Image Source
+                    // Reset display states
+                    pImg.style.display = 'none'; 
+                    pFallback.classList.remove('hidden');
+                    pFallback.innerText = "LOADING...";
+
+                    // Define the specific path
+                    const imagePath = `presets/${p.id}.jpg`;
+
+                    pImg.onload = () => {
+                        // Image loaded successfully
+                        pImg.style.display = 'block';
+                        pFallback.classList.add('hidden');
+                    };
+
+                    pImg.onerror = () => {
+                        // Image failed to load (missing file or wrong name)
+                        pImg.style.display = 'none';
+                        pFallback.classList.remove('hidden');
+                        pFallback.innerText = "NO PREVIEW";
+                    };
+
+                    // Load it
+                    pImg.src = imagePath;
+
+                    // 3. Show Card
+                    pPreview.classList.remove("hidden");
+                });
+
+                btn.addEventListener("mouseleave", () => {
+                    pPreview.classList.add("hidden");
+                });
+                // --- HOVER LOGIC END ---
+
                 btn.addEventListener("click", () => {
                     applyPreset(p.id);
                     pDrop.classList.add("hidden");
+                    pPreview.classList.add("hidden"); // Hide preview on click
                 });
                 pDrop.appendChild(btn);
             });
+        });
+        
+        // Hide preview if mouse leaves the entire dropdown area
+        pDrop.addEventListener("mouseleave", () => {
+            pPreview.classList.add("hidden");
         });
       }
 
@@ -1009,17 +1078,16 @@ const basePresets = [
           return "standard aspect ratio";
       }
 
-      // --- Update Prompt ---
+      // --- Update Prompt Function (Complete & Fixed) ---
       function updatePrompt() {
+        // 1. Helper to get values
         const getVal = (id) => { const el = document.getElementById(id); return el ? el.value : ""; };
         
+        // 2. Gather Basic Data
         const scene = getVal("scene").trim() || "a compelling photography scene";
         
-        // Get new location and datetime values
         const locationVal = getVal("location").trim();
         const datetimeVal = getVal("datetime");
-
-        // Format them
         let locationPart = locationVal ? ` at ${locationVal}` : "";
         let datetimePart = "";
         if (datetimeVal) {
@@ -1042,142 +1110,172 @@ const basePresets = [
         const styleName = document.getElementById("photographerStyle").value;
         const vibe = activePresetVibe;
         
-        // These are hidden now, but we keep the variables for safety/future use
-        const targetYear = getVal("targetYear"); 
-        const dynamicTrigger = getVal("dynamicTrigger").trim();
+        // 3. --- DYNAMIC PHYSICS TRANSLATORS (Research Verified) ---
+        // Translate Numbers -> Visual Descriptions
         
-        // UPDATE LCD (NEW)
+        // ISO Translation
+        const isoNum = parseInt(iso) || 0;
+        let isoDesc = ""; // Empty by default
+        if (iso !== "None") {
+            if (isoNum <= 100) isoDesc = "pristine, noise-free, crystal clear, smooth gradation";
+            else if (isoNum >= 800 && isoNum < 3200) isoDesc = "noticeable film grain, analog texture";
+            else if (isoNum >= 3200) isoDesc = "heavy high-iso sensor noise, gritty texture, chromatic noise";
+            else isoDesc = "authentic texture";
+        }
+
+        // Lens Character Translation
+        const lensCharMap = {
+            "None": "standard optical clarity",
+            "Clinical Sharp": "razor sharp edge-to-edge, high micro-contrast, zero distortion",
+            "Vintage Softness": "soft focus corners, low contrast, organic bloom, optical imperfections",
+            "Dreamy Bloom": "strong halation, glowing highlights, ethereal softness, diffusion filter",
+            "Gentle Halation": "subtle highlight bleed, warm glow, pro-mist effect",
+            "Heavy Vignette": "dark falloff in corners, tunnel vision effect, antique optic",
+            "Swirly Bokeh": "circular background swirl, petzval lens distortion, busy bokeh",
+            "Petzval Curvature": "extreme field curvature, sharp center with blurred edges"
+        };
+        const lensCharDesc = lensCharMap[getVal("lensChar")] || "";
+
+        // 4. Update LCD Screen
         const lcdSafe = (val) => (val && val !== "None") ? val : "--";
         document.getElementById("lcd-shutter").innerText = lcdSafe(shutter);
         document.getElementById("lcd-aperture").innerText = lcdSafe(aperture);
         document.getElementById("lcd-iso").innerText = (iso && iso !== "None") ? iso : "--";
         document.getElementById("lcd-focal").innerText = (focal && focal !== "mm") ? focal.replace("mm","") : "--";
 
-        // Build Tech Strings
+        // 5. Build String Components
         let techParts = [];
         if(aperture !== "None") techParts.push(aperture);
         if(shutter !== "None") techParts.push(shutter);
         if(iso !== "None") techParts.push("ISO " + iso);
         const techString = techParts.join(", ");
 
-        // Build Mood Strings
         let moodParts = [];
         if(film !== "None") moodParts.push(film);
         if(getVal("wb") !== "None") moodParts.push(getVal("wb"));
         if(getVal("grain") !== "None") moodParts.push(getVal("grain"));
-        if(getVal("lensChar") !== "None") moodParts.push(getVal("lensChar"));
+        // We do NOT push lensChar here blindly anymore; we use the descriptive variable in the prompt blocks
         const moodString = moodParts.join(", ");
         
         const lightingNotes = Array.from(activeLightingSetups).join(", ");
-        
-        // --- BRANCH LOGIC BASED ON MODEL ---
         
         let promptMain = "";
         let promptCine = "";
         let promptGrit = "";
         let promptProd = "";
-        let promptLLM = ""; // Director Notes are empty now
-        
-        // Helper to format prompt content
-        const clean = (s) => s.replace(/\.\./g, ".").replace(/,,/g, ",").replace(/ +/g, " ").trim();
-        
-        // 1. Generate DIRECTOR NOTES (Structured LLM Prompt) - Removed the verbose structure logic
-        promptLLM = "";
 
-
-        // 2. Generate FINAL PROMPTS based on Model selection
+        // --- 6. MODEL LOGIC (Midjourney v7 / Flux.2 / Chat) ---
 
         if (activeModel === "midjourney") {
-            // --- MIDJOURNEY LOGIC (Paragraphs) ---
+            // --- MIDJOURNEY v7 STRATEGY ---
             
             let blocks = [];
-            // Add location and datetime to the scene description
-            blocks.push(`${scene}${locationPart}${datetimePart}, ${genre} photography`);
-            blocks.push(`Shot on ${cam}, ${lens} ${focal}${techString ? `, ${techString}` : ""}`);
             
+            // Para 1: Narrative
+            blocks.push(`${scene}${locationPart}${datetimePart}. ${genre} photography.`);
+            
+            // Para 2: Specs
+            blocks.push(`Shot on ${cam} with a ${lens} lens at ${focal}. Settings: ${techString || "Auto"}.`);
+            
+            // Para 3: Atmosphere & Physics
             let styleBlock = [];
             if(lighting !== "None") styleBlock.push(lighting);
             if(lightingNotes) styleBlock.push(lightingNotes);
-            if(composition !== "None") styleBlock.push(composition);
             if(moodString) styleBlock.push(moodString);
+
+            // Inject the Translators
+            if(isoDesc) styleBlock.push(isoDesc); 
+            if(getVal("lensChar") !== "None") styleBlock.push(lensCharDesc);
+            
             if(vibe) styleBlock.push(vibe);
-            if(genre === "product" && getVal("productSubgenre") !== "None") styleBlock.push(getVal("productSubgenre"));
             if(styleBlock.length > 0) blocks.push(styleBlock.join(", "));
 
             let coreText = blocks.join(".\n\n"); 
             
-            promptMain = coreText + "\n\n--style raw --s 250" + activeAR;
-            promptCine = coreText + "\n\n--style raw --s 250" + activeAR;
-            promptGrit = coreText + ", high contrast, gritty texture\n\n--style raw" + activeAR; 
-            promptProd = coreText + ", commercial lighting, hyper-detailed, 8k\n\n" + activeAR;
+            // Params & Negatives
+            const negatives = " --no illustration, 3d render, painting, drawing, cgi, text, watermark, smooth skin";
+            const mjParams = " --v 7 --style raw --s 150";
+            
+            promptMain = coreText + "\n\n" + mjParams + negatives + activeAR;
+            
+            // Variations
+            promptCine = coreText + "\n\nCinematic color grading, teal and orange, IMAX quality, atmospheric depth." + mjParams.replace("150","250") + negatives + activeAR;
+            promptGrit = coreText + "\n\nTactile texture, micro-contrast, raw documentary aesthetic, unpolished." + mjParams.replace("150","50") + negatives + activeAR; 
+            promptProd = coreText + "\n\nCommercial studio lighting, advertising standard, 8k resolution, sharp focus." + mjParams.replace("150","400") + negatives + activeAR;
 
         } else if (activeModel === "flux") {
-            // --- FLUX.1 LOGIC (Grouped Sentences) ---
+            // --- FLUX.2 STRATEGY ---
 
-            // Add location and datetime to the scene description
-            let p1 = `${scene}${locationPart}${datetimePart}.`;
+            // Para 1: Subject
+            let p1 = `${scene}${locationPart}${datetimePart}. The image is a ${genre} photograph.`;
             
-            let p2 = `This is a ${genre} photograph shot on a ${cam} with a ${lens} lens ${focal ? `at ${focal}` : ""}.`;
-            if(techString) p2 += ` Camera settings: ${techString}.`;
+            // Para 2: Physics Translation
+            let p2 = `Captured on a ${cam} using a ${lens} lens set to ${focal || "35mm"}.`;
+            if(aperture && aperture !== "None") {
+                const isWide = aperture.includes('1.2') || aperture.includes('1.4') || aperture.includes('1.8') || aperture.includes('2.8');
+                p2 += ` Aperture ${aperture} applied for ${isWide ? "a shallow depth of field with blurry bokeh background" : "deep focus and edge-to-edge sharpness"}.`;
+            }
+            if(shutter && shutter !== "None") p2 += ` Shutter speed ${shutter} to control motion blur.`;
             
+            // Para 3: Vibe
             let p3 = [];
-            if(lighting !== "None") p3.push(`The lighting is ${lighting}${lightingNotes ? ` featuring ${lightingNotes}` : ""}.`);
-            if(composition !== "None") p3.push(`Composition utilizes ${composition}.`);
-            if(moodString) p3.push(`The image has the look of ${moodString}.`);
-            if(vibe) p3.push(`Overall vibe: ${vibe}.`);
-            if(genre === "product" && getVal("productSubgenre") !== "None") p3.push(`Style: ${getVal("productSubgenre")}.`);
-            let p3Text = p3.join(" ");
+            if(lighting !== "None") p3.push(`Lighting configuration: ${lighting}${lightingNotes ? ` featuring ${lightingNotes}` : ""}.`);
+            if(moodString) p3.push(`Visual characteristics: ${moodString}.`);
+            if(vibe) p3.push(`Vibe: ${vibe}.`);
             
-            let p4 = `Aspect ratio is ${getARText(activeAR)}.`;
-            
-            let parts = [p1, p2, p3Text, p4].filter(x => x.trim().length > 0);
-            let core = parts.join("\n\n");
+            // Para 4: Texture Force
+            // We use the Dynamic Descriptions here
+            let isoText = isoDesc ? `, ${isoDesc}` : "";
+            let lensText = lensCharDesc ? `, ${lensCharDesc}` : "";
+            let p4 = `Texture Quality: High fidelity${isoText}${lensText}, raw sensor data, uncompressed.`;
+
+            let core = [p1, p2, p3.join(" "), p4].join("\n\n");
             
             promptMain = core;
-            promptCine = core + "\n\nThe style is cinematic and realistic.";
-            promptGrit = core + "\n\nThe image has high contrast and gritty texture.";
-            promptProd = core + "\n\nThe lighting is clean and commercial with hyper-detail.";
+            promptCine = core + "\n\nLook: Big budget cinema, anamorphic lens flares, volumetric fog, color graded.";
+            promptGrit = core + "\n\nLook: War photography, heavy grain, dirty lens, handheld camera shake.";
+            promptProd = core + "\n\nLook: Luxury advertising, macro contrast, specular highlights, clean background.";
 
         } else if (activeModel === "dalle") {
-            // --- DALL-E 3 / CHAT LOGIC (Instruction Blocks) ---
+            // --- GPT / NanoBanana STRATEGY ---
+            
+            let header = "GENERATE A PHOTOREALISTIC IMAGE BASED ON THESE SPECIFICATIONS:\n\n";
+            
+            // Using Dynamic Descriptions in DataBlock
+            let dataBlock = `SUBJECT: ${scene}${locationPart}${datetimePart}
+CAMERA: ${cam}
+LENS: ${lens} (${focal}) ${lensCharDesc ? `-> Look: ${lensCharDesc}` : ""}
+LIGHTING: ${lighting} (${lightingNotes})
+ISO/TEXTURE: ${iso} ${isoDesc ? `(${isoDesc})` : ""}
+STYLE: ${moodString}
+VIBE: ${vibe}
+COMPOSITION: ${composition}`;
 
-            // Add location and datetime to the scene description
-            let p1 = `Please generate a photorealistic image of: ${scene}${locationPart}${datetimePart}.`;
-            
-            let p2 = `Simulate the physics of a ${genre} photo taken with ${cam} using a ${lens} lens ${focal ? `at ${focal}` : ""}.`;
-            if(techString) p2 += ` Configure camera settings to: ${techString}.`;
-            
-            let p3 = [];
-            if(lighting !== "None") p3.push(`Set lighting to ${lighting}${lightingNotes ? ` combined with ${lightingNotes}` : ""}.`);
-            if(composition !== "None") p3.push(`Frame the shot using ${composition}.`);
-            if(moodString) p3.push(`Grade the colors and texture to mimic ${moodString}.`);
-            if(vibe) p3.push(`Capture this specific mood: ${vibe}.`);
-            let p3Text = p3.join(" ");
-            
-            let p4 = `Ensure the image is strictly photorealistic with no text overlays or graphics. The final output should be a ${getARText(activeAR)}.`;
-            
-            let parts = [p1, p2, p3Text, p4].filter(x => x.trim().length > 0);
-            let core = parts.join("\n\n");
+            let instructions = `\n\nCRITICAL INSTRUCTIONS:
+1. Visualize the scene using the optical characteristics of the ${lens} (DOF, distortion).
+2. Render the lighting exactly as "${lighting}".
+3. Aspect Ratio: ${getARText(activeAR)}.
+4. IMPORTANT: USE THE PROMPT EXACTLY AS WRITTEN. DO NOT REWRITE OR "ENHANCE" THE DESCRIPTION. 
+5. NO TEXT OVERLAYS OR GRAPHICS. Just the raw photo.`;
+
+            let core = header + dataBlock + instructions;
             
             promptMain = core;
-            promptCine = core + "\n\nPrioritize a dramatic, cinematic look.";
-            promptGrit = core + "\n\nEmphasize raw textures and high contrast.";
-            promptProd = core + "\n\nEnsure perfect, clean commercial lighting.";
+            promptCine = core + "\n\nSTYLE: Cinematic, IMAX quality, teal & orange grading.";
+            promptGrit = core + "\n\nSTYLE: Raw, documentary, high contrast, unpolished.";
+            promptProd = core + "\n\nSTYLE: Commercial advertising standard, perfect studio lighting, 8k.";
         }
 
-        // Clean up formatting
-        const cleanAndFormat = (s) => {
-            // Replaces newlines with actual line breaks for output textarea
-            return clean(s).replace(/\n\n/g, "\n\n").replace(/\n /g, "\n"); 
-        };
+        // 7. Output to Textareas
+        const cleanAndFormat = (s) => s.replace(/\.\./g, ".").replace(/,,/g, ",").replace(/ +/g, " ").trim();
         
         document.getElementById("outMain").value = cleanAndFormat(promptMain);
         document.getElementById("outCine").value = cleanAndFormat(promptCine);
         document.getElementById("outGrit").value = cleanAndFormat(promptGrit);
         document.getElementById("outProd").value = cleanAndFormat(promptProd);
-        // Ensure outLLM is empty or hidden text for removal, but not used in logic flow
         document.getElementById("outLLM").value = ""; 
 
+        // 8. Update UI Ambience
         updateAmbiance();
       }
 
@@ -1539,5 +1637,8 @@ const basePresets = [
     }
   });
 </script>
+
+
+
 </body>
 </html>
