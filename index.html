@@ -841,7 +841,8 @@ const basePresets = [
   { id:"kubrick-perspective", title:"Stanley Kubrick", category:"Cinematic", desc:"One-point perspective, clinical.", data:{ genre:"cinematic", camera:"Arriflex 35 BL", lens:"18mm prime", focal:18, aperture:"f/0.7", shutter:"1/48s", iso:"100", lighting:"Candlelight", composition:"Centered", lightingSetups:["practical lighting"], vibe:"Stanley Kubrick style, obsessive one-point perspective, clinical detachment, deep focus or extreme shallow (Barry Lyndon), Steadicam fluidity, uncanny symmetry, cold or high-contrast practical lighting.", lensChar:"Clinical Sharp", film:"Kodak 5247 100T (70s/80s)", wb:"Cool Shade", grain:"Subtle Grain" } },
   { id:"fraser-darkness", title:"Greig Fraser", category:"Cinematic", desc:"Modern dark epic (Dune/Batman).", data:{ genre:"cinematic", camera:"Arri Alexa LF", lens:"50mm anamorphic", focal:50, aperture:"f/2.8", shutter:"1/48s", iso:"1600", lighting:"Soft Overcast", composition:"Rule of Thirds", lightingSetups:["soft top down ambient"], vibe:"Greig Fraser style, modern dark epic cinematography, soft falloff, rich blacks, textured shadows, atmospheric haze, grounded sci-fi realism, anamorphic depth, distinct oval bokeh.", lensChar:"Vintage Softness", film:"Kodak Vision3 500T (5219)", wb:"Daylight Balanced", grain:"Medium Texture" } }, 
   { id:"scott-atmosphere", title:"Ridley Scott", category:"Cinematic", desc:"Atmospheric shafts of light, industrial haze.", data:{ genre:"cinematic", camera:"Arriflex 35 BL", lens:"50mm anamorphic", focal:50, aperture:"f/2.8", shutter:"1/48s", iso:"100", lighting:"Neon Practical", composition:"Layered Depth", lightingSetups:["atmospheric smoke and light shafts", "backlit translucent diffusion, soft halos"], vibe:"Ridley Scott style (Blade Runner/Alien), dense atmospheric layering, smoke and haze, distinct shafts of light (god rays), high contrast, industrial texture, anamorphic lens flares, cyan and orange grading, chiaroscuro.", lensChar:"Gentle Halation", film:"Kodak 5247 100T (70s/80s)", wb:"Mixed Lighting", grain:"Medium Texture" } },  
-  { id:"lubezki-natural", title:"Emmanuel Lubezki", category:"Cinematic", desc:"Immersive wide-angle naturalism.", data:{ genre:"cinematic", camera:"Arri Alexa 65", lens:"14mm prime", focal:14, aperture:"f/5.6", shutter:"1/48s", iso:"800", lighting:"Natural Light", composition:"Layered Depth", lightingSetups:[], vibe:"Emmanuel Lubezki style (The Revenant/Birdman), extreme wide angle close-up, immersive proximity, natural light only (magic hour or overcast), cold blue tones contrasting with warm breath/fire, hyper-realistic resolution, floating camera movement.", lensChar:"Clinical Sharp", film:"Digital Sensor", wb:"Daylight Balanced", grain:"Clean/No Grain" } },  { id:"storaro-period", title:"Vittorio Storaro", category:"Cinematic", desc:"Rich period color.", data:{ genre:"cinematic", camera:"Arriflex 35 BL", lens:"50mm prime", focal:50, aperture:"f/2.8", shutter:"1/48s", iso:"200", lighting:"Candlelight", composition:"Centered", lightingSetups:["backlit translucent diffusion, soft halos"], vibe:"Vittorio Storaro style, dramatic chiaroscuro, warm practical sources, saturated period palette, deep blacks with painterly light contour.", lensChar:"Dreamy Bloom", film:"Kodak Vision3 200T (5213)", wb:"Warm Tungsten", grain:"Subtle Grain" } },
+  { id:"lubezki-natural", title:"Emmanuel Lubezki", category:"Cinematic", desc:"Immersive wide-angle naturalism.", data:{ genre:"cinematic", camera:"Arri Alexa 65", lens:"14mm prime", focal:14, aperture:"f/5.6", shutter:"1/48s", iso:"800", lighting:"Natural Light", composition:"Layered Depth", lightingSetups:[], vibe:"Emmanuel Lubezki style (The Revenant/Birdman), extreme wide angle close-up, immersive proximity, natural light only (magic hour or overcast), cold blue tones contrasting with warm breath/fire, hyper-realistic resolution, floating camera movement.", lensChar:"Clinical Sharp", film:"Digital Sensor", wb:"Daylight Balanced", grain:"Clean/No Grain" } },  
+  { id:"storaro-period", title:"Vittorio Storaro", category:"Cinematic", desc:"Operatic light, rich color symbolism.", data:{ genre:"cinematic", camera:"Arriflex 35 BL", lens:"40mm anamorphic", focal:40, aperture:"f/4", shutter:"1/48s", iso:"100", lighting:"Golden Hour", composition:"Symmetrical Arch", lightingSetups:["atmospheric smoke and light shafts", "high contrast rim lighting"], vibe:"Vittorio Storaro style (Apocalypse Now), writing with light, operatic high contrast, rich color symbolism (orange vs blue), Technovision anamorphic flares, epic scale chiaroscuro.", lensChar:"Clinical Sharp", film:"Kodak 5247 100T (70s/80s)", wb:"Warm Tungsten", grain:"Subtle Grain" } },
   { id:"kurosawa-epic", title:"Akira Kurosawa", category:"Cinematic", desc:"Epic tableau, weather.", data:{ genre:"cinematic", camera:"Mitchell BNC", lens:"300mm tele", focal:300, aperture:"f/11", shutter:"1/48s", iso:"100", lighting:"Soft Overcast", composition:"Wide Establishing", vibe:"Akira Kurosawa style, epic tableau framing, telephoto compression to stack armies/crowds, strong weather like rain fog wind, layered depth, disciplined wides.", lensChar:"Vintage Softness", film:"B&W Sheet Film", wb:"Daylight Balanced", grain:"Medium Texture" } },
 
   // ANALOG VAULT
@@ -1860,12 +1861,26 @@ ${userNeg ? `AVOID/EXCLUDE: ${userNeg}` : ""}`;
          if(el) el.addEventListener(el.tagName === "TEXTAREA" || el.tagName === "INPUT" ? "input" : "change", updatePrompt);
       });
 
-      // --- Tuning Rack Listeners ---
-      const tuningParams = ["paramStylize", "paramChaos", "paramWeird"];
-      tuningParams.forEach(id => {
-          const el = document.getElementById(id);
-          if(el) {
-              el.addEventListener("input", updatePrompt);
+      // --- Tuning Rack Listeners (Optimized for Mobile) ---
+      const sliderMap = {
+          "paramStylize": "val-stylize",
+          "paramChaos": "val-chaos",
+          "paramWeird": "val-weird"
+      };
+
+      Object.keys(sliderMap).forEach(sliderId => {
+          const slider = document.getElementById(sliderId);
+          const label = document.getElementById(sliderMap[sliderId]);
+
+          if (slider && label) {
+              slider.addEventListener("input", (e) => {
+                  // 1. Instant Visual Update (Super Fast)
+                  // This forces the number to change immediately while dragging
+                  label.innerText = e.target.value; 
+                  
+                  // 2. Update Prompt (Heavy Logic)
+                  updatePrompt();
+              });
           }
       });
 
