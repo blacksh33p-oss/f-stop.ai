@@ -300,7 +300,9 @@
         <button id="historyBtn" type="button" class="flex items-center gap-2 px-4 py-2 rounded-sm bg-studio-900 border border-studio-700 hover:border-studio-500 text-[10px] uppercase tracking-wider font-bold text-studio-400 hover:text-white transition">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> History
         </button>
-        <div class="text-[10px] font-mono text-studio-500 border border-studio-800 rounded-sm px-2 py-1 bg-studio-950">v8.9</div>
+        <button id="changelogBtn" class="text-[10px] font-mono text-studio-400 hover:text-white border border-studio-700 hover:border-indigo-500 rounded-sm px-2 py-1 bg-studio-900 transition cursor-pointer flex items-center gap-2">
+    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> v8.9
+</button>
       </div>
     </header>
 
@@ -700,34 +702,34 @@ document.addEventListener('DOMContentLoaded', () => {
 const compositions = [
   "None",
   "Rule of Thirds","Centered","Leading Lines",
+  "Centered / Floating Head", 
+  "Dynamic/Snapshot", // <-- TESTINO ADDITION
+  "Wide Tableau",
   "High Angle (Bird's Eye)", "Low Angle Hero", "Top-down Flat Lay",
   "Over-the-shoulder","Wide Establishing","Tight Close-up",
   "Side Profile", 
-  "Environmental Portrait", // <--- ADD THIS
+  "Environmental Portrait",
   "Candid Snapshot","Asymmetric Framing","Peek-through",
   "Symmetrical Arch","Layered Depth"
 ];
+
 const cameras = [
   "None",
-  // Modern Mirrorless / Digital
   "Sony Alpha 1","Canon EOS R3","Nikon Z9","Sony A7 IV","Sony A7R V","Canon EOS R5 II","Nikon Z5 II","Fujifilm X-T5","Fujifilm GFX 100S II","Hasselblad X2D 100C","Phase One XF IQ4","Leica SL3","iPhone 16 Pro","Hasselblad H6D","Nikon D850","Canon EOS 5D Mark IV","DJI Mavic 3",
-  // Cinema Digital
   "Arri Alexa 35","Arri Alexa LF","Red V-Raptor","Arri Alexa 65",
-  // 35mm Film Rangefinders & SLRs
   "Leica M3", "Leica M6", "Nikon F3", "Nikon F5", "Nikon F6", "Canon EOS 1v", "Contax T2", "Ricoh GR21", "Canon Rangefinder",
-  // Medium Format Film
-  "Rolleiflex 2.8F", "Hasselblad 500C/M", "Pentax 67", "Pentax 645", "Mamiya RZ67",
-  // Large Format & Press
+  "Rolleiflex 2.8F", "Hasselblad 500C/M", "Hasselblad 555ELD", "Pentax 67", "Pentax 67II", "Pentax 645", "Mamiya RZ67", // <-- ADDED Pentax 67II
   "Speed Graphic 4x5", "Deardorff 8x10", "Large Format 4x5", "Large Format 8x10", "Voigtländer Bergheil", "Graflex Series D",
-  // Cinema Film
   "Arriflex 35 BL", "Arricam ST", "Panavision PSR", "Mitchell BNC", "Technicolor 3-Strip Camera", "IMAX 15/65",
-  // Vintage / Specialty
   "Polaroid SX-70", "Sony VX1000", "Contact Print"
 ];
 
 const lensesByGenre = {
   portrait: [
     "35mm env", "50mm prime", "85mm prime", "105mm prime", "135mm prime", "70-200mm zoom",
+    "30mm Zeiss Distagon T* Fisheye", 
+    "SMC Pentax 55mm f/4", // <-- TESTINO ADDITION (Merged into Portrait)
+    "SMC Pentax 45mm f/4",
     "35mm prime", "80mm prime", "116mm prime", "120mm macro", "150mm prime", "300mm prime", "360mm prime"
   ],
   street: [
@@ -744,7 +746,7 @@ const lensesByGenre = {
   ],
   cinematic: [
     "24mm prime", "35mm prime", "50mm prime", "85mm prime", "40mm anamorphic", "50mm anamorphic", "75mm anamorphic",
-    "14mm prime", "18mm prime", "32mm prime", "45mm wide", "55mm wide", "35mm anamorphic", "65mm anamorphic", "80mm prime", "300mm tele", "500mm tele" // <-- ADDED 500mm
+    "14mm prime", "18mm prime", "32mm prime", "45mm wide", "55mm wide", "35mm anamorphic", "65mm anamorphic", "80mm prime", "300mm tele", "500mm tele"
   ],
   night: [
     "24mm prime", "35mm prime", "50mm prime", "85mm prime",
@@ -773,41 +775,41 @@ const isos = ["None","1","3","5","10","25","50","64","100","200","400","500","80
 const lightings = [
   "None",
   "Natural Light","Direct Sunlight","Soft Overcast","Golden Hour",
-  "Studio Softbox","High Key White Cyc","Studio Hard Light", "Ring Light", // <-- ADDED
-  "Hard Strobe","Direct Flash","Neon Practical","Candlelight",
+  "Studio Softbox","High Key White Cyc","Studio Hard Light", 
+  "Ring Light", "Direct Ring Flash / Hard Strobe", // <-- TESTINO ADDITION
+  "Natural Window Light / Diffused HMI",
+  "Hard Strobe", "Hard Strobe (Zoom Reflector)", 
+  "Direct Flash","Neon Practical","Candlelight",
   "Stadium Lights","Underwater Ambient"
 ];
 const lensChars = [
   "None",
-  "Clinical Sharp","Vintage Softness","Dreamy Bloom",
-  "Gentle Halation","Chromatic Aberration", // <-- ADDED
+  "Clinical Sharp","Vintage Softness","Dreamy Bloom", "Painterly & Soft",
+  "Gentle Halation","High Contrast & Saturated", // <-- TESTINO ADDITION
+  "Chromatic Aberration", "Distorted & Sharp", 
   "Heavy Vignette", "Swirly Bokeh", "Petzval Curvature"
 ];
-// UPDATED FILM LIST TO MATCH VERIFIED PRESETS
+
 const films = [
   "None",
-  // Color Negative
   "Kodak Portra 400","Kodak Portra 160","Kodak Portra 800", "Fuji Pro 400H", "Kodak Gold 200", "Kodak Gold 400",
-  // Cinema Modern
+  "Kodak Portra 400NC (Overexposed)",
   "Kodak Vision3 500T (5219)", "Kodak Vision3 250D (5207)", "Kodak Vision3 200T (5213)", "Cinestill 800T",
-  // Cinema Vintage
   "Kodak 5247 100T (70s/80s)", "Kodak 5293 200T", "Technicolor Three-Strip",
-  // B&W
-  "Eastman Double-X 5222", "Kodak Tri-X 400", "Kodak Tri-X B&W", "Ilford HP5", "Ilford HP5 Plus", "Ilford Delta 3200", "B&W Sheet Film", "B&W Negative", // <-- ADDED DOUBLE-X
-  // Slide
-  "Kodachrome 64", "Fujichrome Velvia", "Kodak Ektachrome", "Kodak Ektachrome E100",
-  // Vintage/Alt
+  "Eastman Double-X 5222", "Kodak Tri-X 400", "Kodak Tri-X 400 (Pushed)", "Kodak Tri-X B&W", "Ilford HP5", "Ilford HP5 Plus", "Ilford Delta 3200", "B&W Sheet Film", "B&W Negative",
+  "Kodachrome 64", "Fujichrome Velvia", "Fujichrome Velvia 50", // <-- TESTINO ADDITION
+  "Kodak Ektachrome", "Kodak Ektachrome E100",
   "Wet Plate Collodion", "Nitrate Film", "Autochrome Plate", "Kodak Aerochrome (IR)", "Polaroid 600", "Polaroid Type 55",
-  // Digital
   "Digital Sensor", "Digital Video Tape (DV)", "Digital"
 ];
 
-const wbs = ["None","Daylight Balanced","Warm Tungsten","Cool Shade","Mixed Lighting"];
-const grains = ["None","Clean/No Grain","Subtle Grain","Medium Texture","Heavy Grit"];
+const wbs = ["None","Daylight Balanced","Warm Tungsten","Cool Shade","Mixed Lighting", "Monochrome", "Flash Balanced"]; // <-- TESTINO ADDITION
+const grains = ["None","Clean/No Grain","Subtle Grain","Medium Texture","Heavy Grit", "Heavy Silver Halide", "Fine Color Grain", "Organic Medium"]; // <-- TESTINO ADDITION
 const productSubgenres = ["None","Ecommerce Packshot","Luxury Jewelry Macro","Watch Hero","Cosmetics Splash","Sneaker Floating","Tech Gadget Hero","Beverage Condensation","Food Editorial","Tabletop Styled"];
 
 const lightingSetupLibrary = [
   { label: "Softbox Key", phrase: "45 degree softbox key, white bounce fill" },
+  { label: "Butterfly", phrase: "butterfly lighting, single light source placed high above lens, distinct shadow under nose" }, // <-- ADDED FOR PLATON
   { label: "Painterly Octa", phrase: "large octabank source, feathered edge, painterly falloff" },
   { label: "Negative Fill", phrase: "negative fill, black flags, light subtraction" },
   { label: "Dual Softbox", phrase: "dual softbox symmetric lighting" },
@@ -847,13 +849,12 @@ const basePresets = [
   // PORTRAIT & FASHION
   { id:"lindbergh-raw", title: "Peter Lindbergh", category: "Portrait & Fashion", desc: "Raw B&W realism, negative fill.", data: { genre: "portrait", camera: "Nikon F5", lens: "85mm prime", focal: 85, aperture: "f/2.8", shutter: "1/250s", iso: "400", lighting: "Soft Overcast", composition: "Centered", lightingSetups: ["window side light, soft falloff", "negative fill, black flags, light subtraction"], vibe: "Peter Lindbergh style, raw emotive portrait realism, natural skin texture, minimal retouch, strong eye contact, wind-blown hair, coastal or industrial backdrops, high contrast monochrome, rich blacks.", lensChar: "Vintage Softness", film: "Kodak Tri-X 400", wb: "Daylight Balanced", grain: "Medium Texture" } },  
   { id:"weir-soft", title:"Harley Weir", category:"Portrait & Fashion", desc:"Soft daylight, intimate warmth.", data:{ genre:"portrait", camera:"Pentax 67", lens:"105mm prime", focal:105, aperture:"f/2.4", shutter:"1/125s", iso:"400", lighting:"Natural Light", composition:"Tight Close-up", lightingSetups:["window side light, soft falloff"], vibe:"Harley Weir style, soft warm natural light, intimate close distance, focus on sensory details (skin, fabric), shallow depth of field with 3D pop, gentle color, candid energy, editorial but lived-in mood.", lensChar:"Dreamy Bloom", film:"Kodak Portra 400", wb:"Daylight Balanced", grain:"Subtle Grain" } },  
-  { id:"leibovitz-celeb", title: "Annie Leibovitz", category: "Portrait & Fashion", desc: "Theatrical staged storytelling.", data: { genre: "portrait", camera: "Hasselblad H6D", lens: "35mm prime", focal: 35, aperture: "f/8", shutter: "1/160s", iso: "100", lighting: "Studio Softbox", composition: "Environmental Portrait", lightingSetups: ["large octabank source, feathered edge, painterly falloff"], vibe: "Annie Leibovitz style (Vanity Fair), painterly aesthetic, desaturated blue-leaning tones, epic environmental context, theatrical posing, rich canvas textures, high-fidelity commercial finish.", lensChar: "Clinical Sharp", film: "Digital Sensor", wb: "Daylight Balanced", grain: "Clean/No Grain" } },  { id:"avedon-highkey", title:"Richard Avedon", category:"Portrait & Fashion", desc:"White background, crisp gestures.", data:{ genre:"portrait", camera:"Deardorff 8x10", lens:"360mm prime", focal:360, aperture:"f/22", shutter:"1/60s", iso:"100", lighting:"High Key White Cyc", composition:"Centered", lightingSetups:["high key white cyc, even wraparound light"], vibe:"Richard Avedon style, high-key white cyc fashion portraits, sharp edges, expressive movement, clean modern contrast, dark edges of the negative visible.", lensChar:"Clinical Sharp", film:"Kodak Tri-X 400", wb:"Daylight Balanced", grain:"Clean/No Grain" } },
-  { id:"newton-edgy", title:"Helmut Newton", category:"Portrait & Fashion", desc:"Hard light luxury provocation.", data:{ genre:"portrait", camera:"Hasselblad 500C/M", lens:"80mm prime", focal:80, aperture:"f/8", shutter:"1/125s", iso:"100", lighting:"Hard Strobe", composition:"Rule of Thirds", lightingSetups:["strip rim light, edge definition"], vibe:"Helmut Newton style, hard directional light, glossy high-contrast fashion, controlled provocation, sculpted bodies and luxury attitude.", lensChar:"Clinical Sharp", film:"Kodak Ektachrome E100", wb:"Daylight Balanced", grain:"Subtle Grain" } },
-  { id:"platon-close", title:"Platon", category:"Portrait & Fashion", desc:"Intense wide close-ups.", data:{ genre:"portrait", camera:"Hasselblad 500C/M", lens:"120mm macro", focal:120, aperture:"f/16", shutter:"1/250s", iso:"100", lighting:"Studio Softbox", composition:"Centered", lightingSetups:["clamshell beauty lighting"], vibe:"Platon style, tight symmetrical headshots, bold eye contact, sculpted studio light, graphic simplicity, scanned film borders.", lensChar:"Clinical Sharp", film:"Kodak Tri-X 400", wb:"Daylight Balanced", grain:"Medium Texture" } },
-  { id:"goldin-diary", title:"Nan Goldin", category:"Portrait & Fashion", desc:"Diaristic flash, warm interiors.", data:{ genre:"night", camera:"Leica M6", lens:"35mm prime", focal:35, aperture:"f/8", shutter:"1/60s", iso:"400", lighting:"Direct Flash", composition:"Candid Snapshot", lightingSetups:["hard direct flash, fast falloff shadows"], vibe:"Nan Goldin style, diaristic nightlife portraiture, emotional immediacy, on-camera flash, warm mixed interiors, Cibachrome print look.", lensChar:"Vintage Softness", film:"Kodak Gold 200", wb:"Warm Tungsten", grain:"Heavy Grit" } },
-  { id:"testino-fashion", title:"Mario Testino", category:"Portrait & Fashion", desc:"High-glam editorial polish.", data:{ genre:"portrait", camera:"Canon EOS 5D Mark IV", lens:"70-200mm zoom", focal:85, aperture:"f/5.6", shutter:"1/200s", iso:"100", lighting:"Studio Softbox", composition:"Rule of Thirds", lightingSetups:["45 degree softbox key, white bounce fill","strip rim light, edge definition"], vibe:"Mario Testino style, polished high fashion portraiture, confident energy, clean glamour lighting, bright editorial color.", lensChar:"Clinical Sharp", film:"Digital Sensor", wb:"Daylight Balanced", grain:"Clean/No Grain" } },
-  { id:"walker-surreal", title:"Tim Walker", category:"Portrait & Fashion", desc:"Whimsical theatrical surrealism.", data:{ genre:"cinematic", camera:"Pentax 67", lens:"45mm wide", focal:45, aperture:"f/5.6", shutter:"1/60s", iso:"400", lighting:"Studio Softbox", composition:"Asymmetric Framing", lightingSetups:["dual softbox symmetric lighting"], vibe:"Tim Walker style, whimsical surreal fashion staging, oversized props, theatrical scale, dreamy pastel or jewel palette, gentle bloom.", lensChar:"Dreamy Bloom", film:"Kodak Portra 160", wb:"Daylight Balanced", grain:"Subtle Grain" } },
-  { id:"bourdin-surreal", title:"Guy Bourdin", category:"Portrait & Fashion", desc:"Bold color, surreal fashion.", data:{ genre:"cinematic", camera:"Pentax 67", lens:"55mm wide",focal:55,aperture:"f/11",shutter:"1/125s",iso:"100",lighting:"Hard Strobe",composition:"Asymmetric Framing",lightingSetups:["strip rim light, edge definition"],vibe:"Guy Bourdin style, surreal fashion narrative, bold saturated color, strong graphic composition, uncanny poses and props, high-contrast studio light.",lensChar:"Clinical Sharp",film:"Kodak Ektachrome E100",wb:"Mixed Lighting",grain:"Subtle Grain" } },
+  { id:"leibovitz-celeb", title: "Annie Leibovitz", category: "Portrait & Fashion", desc: "Theatrical staged storytelling.", data: { genre: "portrait", camera: "Hasselblad H6D", lens: "35mm prime", focal: 35, aperture: "f/8", shutter: "1/160s", iso: "100", lighting: "Studio Softbox", composition: "Environmental Portrait", lightingSetups: ["large octabank source, feathered edge, painterly falloff"], vibe: "Annie Leibovitz style (Vanity Fair), painterly aesthetic, desaturated blue-leaning tones, epic environmental context, theatrical posing, rich canvas textures, high-fidelity commercial finish.", lensChar: "Clinical Sharp", film: "Digital Sensor", wb: "Daylight Balanced", grain: "Clean/No Grain" } },  
+  { id:"avedon-highkey", title:"Richard Avedon", category:"Portrait & Fashion", desc:"White background, crisp gestures.", data:{ genre:"portrait", camera:"Deardorff 8x10", lens:"360mm prime", focal:360, aperture:"f/32", shutter:"1/125s", iso:"400", lighting:"High Key White Cyc", composition:"Centered", lightingSetups:["high key white cyc, even wraparound light"], vibe:"Richard Avedon style, stark minimalism, pure white seamless background, 8x10 large format contact print aesthetic, visible black film borders (rebate edge), uncompromising sharpness, expressive gesture, high contrast black and white.", lensChar:"Clinical Sharp", film:"Kodak Tri-X 400", wb:"Daylight Balanced", grain:"Clean/No Grain" } },  
+  { id:"newton-edgy", title:"Helmut Newton", category:"Portrait & Fashion", desc:"Hard ring flash, statuesque poses.", data:{ genre:"portrait", camera:"Hasselblad 500C/M", lens:"80mm prime", focal:80, aperture:"f/11", shutter:"1/125s", iso:"100", lighting:"Ring Light", composition:"Low Angle Hero", lightingSetups:["ring light fill"], vibe:"Helmut Newton style, 'Porno-chic' aesthetic, hard ring flash lighting creating a distinct shadow halo on the wall, glossy/oily skin texture, statuesque Amazonian women, low angle empowerment, cold eroticism, high contrast color reversal film.", lensChar:"Clinical Sharp", film:"Kodak Ektachrome E100", wb:"Daylight Balanced", grain:"Clean/No Grain" } },  
+  { id:"platon-close", title:"Platon", category:"Portrait & Fashion", desc:"Intense wide-angle close-ups.", data:{ genre:"portrait", camera:"Hasselblad 555ELD", lens:"30mm Zeiss Distagon T* Fisheye", focal:30, aperture:"f/16", shutter:"1/500s", iso:"400", lighting:"Hard Strobe (Zoom Reflector)", composition:"Centered / Floating Head", lightingSetups:["Hard butterfly lighting", "Single strobe with zoom reflector on-axis", "Heavy vignetting on white background"], vibe:"Platon style, 30mm fisheye on medium format (extreme barrel distortion), camera inches from subject, bulbous nose and intense eyes while ears recede, high-contrast monochrome, geological skin texture, confrontational gaze.", lensChar:"Distorted & Sharp", film:"Kodak Tri-X 400 (Pushed)", wb:"Monochrome", grain:"Heavy Silver Halide" } },  
+  { id:"testino-fashion", title:"Mario Testino", category:"Portrait & Fashion", desc:"High-voltage glamour and kinetic energy.", data:{ genre:"portrait", camera:"Pentax 67II", lens:"SMC Pentax 55mm f/4", focal:55, aperture:"f/11", shutter:"1/125s", iso:"100", lighting:"Direct Ring Flash / Hard Strobe", composition:"Dynamic/Snapshot", lightingSetups:["Direct on-axis hard flash","Shadows falling directly behind subject","High specular highlights on skin"], vibe:"Mario Testino style, Gucci era aesthetic, wide-angle medium format, hard flash creating distinct drop shadows, hyper-saturated skin tones, oiled/glossy texture, hedonistic atmosphere, sharp foreground with vibrant colors.", lensChar:"High Contrast & Saturated", film:"Fujichrome Velvia 50", wb:"Flash Balanced", grain:"Fine Color Grain" } },  
+  { id:"walker-surreal", title:"Tim Walker", category:"Portrait & Fashion", desc:"Whimsical theatrical surrealism.", data:{ genre:"portrait", camera:"Pentax 67II", lens:"SMC Pentax 45mm f/4", focal:45, aperture:"f/4", shutter:"1/30s", iso:"400", lighting:"Natural Window Light / Diffused HMI", composition:"Wide Tableau", lightingSetups:["Soft directional window light","Overexposed highlights","Negative fill"], vibe:"Tim Walker style, storybook surrealism, crumbling English architecture, oversized practical props (no CGI), distorted scale, romantic decaying grandeur, milky pastel colors, soft focus falloff.", lensChar:"Painterly & Soft", film:"Kodak Portra 400NC (Overexposed)", wb:"Daylight Balanced", grain:"Organic Medium" } },  { id:"bourdin-surreal", title:"Guy Bourdin", category:"Portrait & Fashion", desc:"Bold color, surreal fashion.", data:{ genre:"cinematic", camera:"Pentax 67", lens:"55mm wide",focal:55,aperture:"f/11",shutter:"1/125s",iso:"100",lighting:"Hard Strobe",composition:"Asymmetric Framing",lightingSetups:["strip rim light, edge definition"],vibe:"Guy Bourdin style, surreal fashion narrative, bold saturated color, strong graphic composition, uncanny poses and props, high-contrast studio light.",lensChar:"Clinical Sharp",film:"Kodak Ektachrome E100",wb:"Mixed Lighting",grain:"Subtle Grain" } },
 
   // CINEMATIC
   { id:"deakins-cine", title:"Roger Deakins", category:"Cinematic", desc:"Naturalistic film precision.", data:{ genre:"cinematic", camera:"Arri Alexa 35", lens:"32mm prime", focal:32, aperture:"f/2.8", shutter:"1/48s", iso:"800", lighting:"Neon Practical", composition:"Leading Lines", lightingSetups:["window side light, soft falloff"], vibe:"Roger Deakins style, grounded cinematic realism, subtle contrast, motivated practical light, careful negative fill, clean compositions, atmospheric depth without exaggeration.", lensChar:"Clinical Sharp", film:"Kodak Vision3 500T (5219)", wb:"Mixed Lighting", grain:"Subtle Grain" } },
@@ -1399,7 +1400,8 @@ const basePresets = [
             "Heavy Vignette": "dark falloff in corners, tunnel vision effect, antique optic",
             "Swirly Bokeh": "circular background swirl, petzval lens distortion, busy bokeh",
             "Petzval Curvature": "extreme field curvature, sharp center with blurred edges",
-            "Chromatic Aberration": "visible color fringing on edges, red/cyan separation, low quality glass artifact"
+            "Chromatic Aberration": "visible color fringing on edges, red/cyan separation, low quality glass artifact",
+            "Painterly & Soft": "soft focus falloff, dreamlike rendering, reduced contrast, etched glass effect, romantic haze"
         };
         const lensCharDesc = lensCharMap[getVal("lensChar")] || "";
 
@@ -1526,7 +1528,7 @@ const basePresets = [
 
         } else if (activeModel === "dalle") {
             // GPT Logic
-            let header = "GENERATE A PHOTOREALISTIC IMAGE BASED ON THESE SPECIFICATIONS:\n\n";
+            let header = "GENERATE A RAW, AUTHENTIC PHOTOGRAPH BASED ON THESE SPECIFICATIONS:\n\n";
             
             let dataBlock = `SUBJECT: ${scene}${locationPart}${datetimePart}
 CAMERA: ${cam}
@@ -1984,10 +1986,89 @@ ${userNeg ? `AVOID/EXCLUDE: ${userNeg}` : ""}`;
       document.getElementById("loader-error").innerText = "Init Error: " + err.message;
       console.error(err);
     }
+
+    // --- Changelog Modal Logic ---
+      const logModal = document.getElementById("changelogModal");
+      const logBtn = document.getElementById("changelogBtn");
+      const closeLog = document.getElementById("closeChangelog");
+
+      if(logBtn && logModal) {
+          logBtn.addEventListener("click", () => {
+              logModal.classList.remove("hidden");
+          });
+          
+          closeLog.addEventListener("click", () => {
+              logModal.classList.add("hidden");
+          });
+          
+          // Close on click outside
+          logModal.addEventListener("click", (e) => {
+              if(e.target === logModal) logModal.classList.add("hidden");
+          });
+      }
   });
 </script>
 
+<!-- CHANGELOG MODAL -->
+  <div id="changelogModal" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 transition-opacity duration-300">
+     <div class="bg-[#09090b] border border-studio-700 w-full max-w-lg rounded-md shadow-2xl relative max-h-[85vh] flex flex-col overflow-hidden">
+        
+        <!-- Header -->
+        <div class="flex justify-between items-center p-4 border-b border-studio-800 bg-studio-900/50">
+           <div class="flex items-center gap-2">
+               <div class="w-2 h-2 rounded-full bg-[var(--accent-color)] animate-pulse"></div>
+               <h3 class="hardware-label text-white text-xs">System Update Log</h3>
+           </div>
+           <button id="closeChangelog" class="text-studio-500 hover:text-white transition"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
 
+        <!-- Content (Timeline) -->
+        <div class="p-6 overflow-y-auto custom-scrollbar space-y-8">
+            
+            <!-- Version 8.9 -->
+            <div class="relative pl-4 border-l border-studio-700">
+                <div class="absolute -left-1.5 top-1 w-3 h-3 rounded-full bg-indigo-500 border-2 border-[#09090b]"></div>
+                <div class="flex justify-between items-start mb-1">
+                    <span class="text-white font-bold text-xs">v8.9</span>
+                    <span class="text-[10px] text-studio-500 font-mono">NOV 30, 2025</span>
+                </div>
+                <p class="text-[10px] text-studio-400 mb-2">Major Logic Overhaul</p>
+                <ul class="list-disc pl-4 space-y-1 text-[10px] text-studio-300 font-mono leading-relaxed">
+                    <li><span class="text-emerald-400">NEW:</span> Midjourney v7 Support (--sref, --p, NLP logic).</li>
+                    <li><span class="text-emerald-400">NEW:</span> Flux.2 Support (T5-XXL structure).</li>
+                    <li><span class="text-emerald-400">NEW:</span> Reference & Constraints Module added.</li>
+                    <li><span class="text-indigo-400">UPDATE:</span> Collapsible Tuning Rack for advanced controls.</li>
+                    <li><span class="text-indigo-400">UPDATE:</span> Dynamic Physics Translation for ISO/Lens.</li>
+                </ul>
+            </div>
+
+            <!-- Version 8.8 -->
+            <div class="relative pl-4 border-l border-studio-800">
+                <div class="absolute -left-1 top-1 w-2 h-2 rounded-full bg-studio-600 border-2 border-[#09090b]"></div>
+                <div class="flex justify-between items-start mb-1">
+                    <span class="text-studio-300 font-bold text-xs">v8.8</span>
+                    <span class="text-[10px] text-studio-600 font-mono">NOV 28, 2025</span>
+                </div>
+                <ul class="list-disc pl-4 space-y-1 text-[10px] text-studio-500 font-mono leading-relaxed">
+                    <li>Verified historical accuracy for 10+ presets (Kubrick, Adams, etc.).</li>
+                    <li>Added sticky system ticker.</li>
+                    <li>Mobile preview "Eye" button implementation.</li>
+                </ul>
+            </div>
+
+            <!-- Version 1.0 -->
+            <div class="relative pl-4 border-l border-studio-800">
+                <div class="absolute -left-1 top-1 w-2 h-2 rounded-full bg-studio-600 border-2 border-[#09090b]"></div>
+                <div class="flex justify-between items-start mb-1">
+                    <span class="text-studio-300 font-bold text-xs">v1.0</span>
+                    <span class="text-[10px] text-studio-600 font-mono">NOV 01, 2025</span>
+                </div>
+                <p class="text-[10px] text-studio-500 font-mono">Initial Launch of f-stop.</p>
+            </div>
+
+        </div>
+     </div>
+  </div>
 
 </body>
 </html>
