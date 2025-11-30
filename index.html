@@ -1014,6 +1014,7 @@ const basePresets = [
             return;
         }
 
+        // 1. Group Data
         const grouped = {};
         list.forEach(p => {
             const c = p.category || "Other";
@@ -1021,42 +1022,55 @@ const basePresets = [
             grouped[c].push(p);
         });
 
-        // --- PREVIEW LOADER FUNCTION ---
-        const showPreview = (preset) => {
-            // 1. Text
-            pTitle.innerText = preset.title;
-            pDesc.innerText = preset.desc;
+        // 2. Create Sticky Tab Bar Container
+        const tabContainer = document.createElement("div");
+        tabContainer.className = "sticky top-0 z-50 bg-studio-950/95 backdrop-blur-sm border-b border-studio-800 flex items-center gap-1.5 p-2 overflow-x-auto no-scrollbar";
+        
+        // Add styling to hide scrollbar for the tabs but allow scrolling
+        const style = document.createElement('style');
+        style.textContent = `.no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }`;
+        tabContainer.appendChild(style);
+        
+        pDrop.appendChild(tabContainer);
+
+        // 3. Build List & Tabs
+        const categories = Object.keys(grouped).sort();
+
+        categories.forEach(cat => {
+            // A. Create Tab Button
+            const tabBtn = document.createElement("button");
+            tabBtn.type = "button";
+            tabBtn.className = "shrink-0 px-2.5 py-1 rounded-sm border border-studio-700 bg-studio-900 hover:border-studio-500 hover:bg-studio-800 text-[9px] font-bold uppercase text-studio-400 hover:text-white transition whitespace-nowrap";
+            tabBtn.textContent = cat;
             
-            // 2. Image
-            pImg.style.display = 'none'; 
-            pFallback.classList.remove('hidden');
-            pFallback.innerText = "LOADING...";
-            const imagePath = `presets/${preset.id}.jpg`; // Ensure .jpg
+            // Scroll to Section Logic
+            tabBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation(); // Prevent closing dropdown
+                const targetHeader = document.getElementById(`header-${cat.replace(/\s+/g, '-')}`);
+                if(targetHeader) {
+                    // Scroll the dropdown container
+                    pDrop.scrollTo({
+                        top: targetHeader.offsetTop - 45, // Offset for the sticky tab bar height
+                        behavior: 'smooth'
+                    });
+                }
+            });
+            tabContainer.appendChild(tabBtn);
 
-            pImg.onload = () => { pImg.style.display = 'block'; pFallback.classList.add('hidden'); };
-            pImg.onerror = () => { pImg.style.display = 'none'; pFallback.classList.remove('hidden'); pFallback.innerText = "NO PREVIEW"; };
-            pImg.src = imagePath;
-
-            // 3. Show
-            pPreview.classList.remove("hidden");
-        };
-
-        const hidePreview = () => {
-            pPreview.classList.add("hidden");
-        };
-
-        Object.keys(grouped).sort().forEach(cat => {
+            // B. Create Section Header
             const header = document.createElement("div");
-            header.className = "px-3 py-2 text-[9px] font-bold text-studio-500 bg-studio-950 sticky top-0 border-b border-studio-800 uppercase tracking-wider z-10";
+            header.id = `header-${cat.replace(/\s+/g, '-')}`; // Unique ID for scrolling
+            header.className = "px-3 py-2 text-[9px] font-bold text-studio-500 bg-studio-950/50 border-b border-studio-800/50 uppercase tracking-wider mt-1";
             header.textContent = cat;
             pDrop.appendChild(header);
 
+            // C. Create Items
             grouped[cat].forEach(p => {
-                // ROW CONTAINER (Flexbox)
                 const row = document.createElement("div");
                 row.className = "flex w-full border-b border-studio-800 last:border-0 hover:bg-studio-800 transition group";
 
-                // 1. SELECT BUTTON (The Text)
+                // Select Button
                 const selectBtn = document.createElement("button");
                 selectBtn.type = "button";
                 selectBtn.className = "flex-1 text-left px-3 py-2 min-w-0";
@@ -1068,18 +1082,18 @@ const basePresets = [
                     hidePreview();
                 });
 
-                // Desktop Hover on Text also triggers preview (Optional, keeping consistent behavior)
+                // Desktop Hover
                 selectBtn.addEventListener("mouseenter", () => { if(window.innerWidth >= 768) showPreview(p); });
                 selectBtn.addEventListener("mouseleave", () => { if(window.innerWidth >= 768) hidePreview(); });
 
-                // 2. PREVIEW BUTTON (The Eye Icon) - Visible/Touchable on Mobile
+                // Mobile Eye Button
                 const eyeBtn = document.createElement("button");
                 eyeBtn.type = "button";
-                eyeBtn.className = "md:hidden px-4 flex items-center justify-center text-studio-500 hover:text-white hover:bg-studio-700 border-l border-studio-800 transition";                eyeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+                eyeBtn.className = "md:hidden px-4 flex items-center justify-center text-studio-500 hover:text-white hover:bg-studio-700 border-l border-studio-800 transition";
+                eyeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
                 
-                // CLICKING THE EYE (Mobile/Desktop)
                 eyeBtn.addEventListener("click", (e) => {
-                    e.stopPropagation(); // Don't close dropdown
+                    e.stopPropagation();
                     e.preventDefault();
                     showPreview(p);
                 });
@@ -1090,11 +1104,28 @@ const basePresets = [
             });
         });
         
-        // Mobile: Tap anywhere on screen (outside preview) to close preview
-        // We use a global listener that we attach once
+        // Preview Functions (Nested to keep scope clean)
+        const showPreview = (preset) => {
+            pTitle.innerText = preset.title;
+            pDesc.innerText = preset.desc;
+            pImg.style.display = 'none'; 
+            pFallback.classList.remove('hidden');
+            pFallback.innerText = "LOADING...";
+            const imagePath = `presets/${preset.id}.jpg`;
+
+            pImg.onload = () => { pImg.style.display = 'block'; pFallback.classList.add('hidden'); };
+            pImg.onerror = () => { pImg.style.display = 'none'; pFallback.classList.remove('hidden'); pFallback.innerText = "NO PREVIEW"; };
+            pImg.src = imagePath;
+            pPreview.classList.remove("hidden");
+        };
+
+        const hidePreview = () => {
+            pPreview.classList.add("hidden");
+        };
+
+        // Mobile Listener
         if (!window.mobilePreviewListenerAttached) {
             document.addEventListener('click', (e) => {
-               // If clicking outside the preview card AND the dropdown...
                if (!pPreview.contains(e.target) && !e.target.closest('button')) {
                    pPreview.classList.add("hidden");
                }
