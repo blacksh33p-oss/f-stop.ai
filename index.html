@@ -713,14 +713,14 @@ const compositions = [
   "Side Profile", 
   "Environmental Portrait",
   "Candid Snapshot","Asymmetric Framing","Peek-through",
-  "Symmetrical Arch","Layered Depth", "Layered Abstraction"
+  "Symmetrical Arch","Layered Depth", "Layered Abstraction", "Geometry & layered framing"
 ];
 
 const cameras = [
   "None",
   "Sony Alpha 1","Canon EOS R3","Nikon Z9","Sony A7 IV","Sony A7R V","Canon EOS R5 II","Nikon Z5 II","Fujifilm X-T5","Fujifilm GFX 100S II","Hasselblad X2D 100C","Phase One XF IQ4","Leica SL3","iPhone 16 Pro","Hasselblad H6D","Hasselblad H6D-100c", "Nikon D850","Canon EOS 5D Mark IV","DJI Mavic 3", // <-- ADDED H6D-100c
   "Arri Alexa 35","Arri Alexa LF","Red V-Raptor","Arri Alexa 65",
-  "Leica M3", "Leica M6", "Nikon F3", "Nikon F5", "Nikon F6", "Canon EOS 1v", "Contax T2", "Ricoh GR21", "Canon Rangefinder",
+  "Leica M3", "Leica M3 (35mm rangefinder, black paint)", "Leica M6", "Nikon F3", "Nikon F5", "Nikon F6", "Canon EOS 1v", "Contax T2", "Ricoh GR21", "Canon Rangefinder",
   "Rolleiflex 2.8F", "Hasselblad 500C/M", "Hasselblad 555ELD", "Pentax 67", "Pentax 67II", "Pentax 645", "Mamiya RZ67",
   "Speed Graphic 4x5", "Deardorff 8x10", "Large Format 4x5", "Large Format 8x10", "Voigtländer Bergheil", "Graflex Series D",
   "Arriflex 35 BL", "Arricam ST", "Panavision PSR", "Mitchell BNC", "Technicolor 3-Strip Camera", "IMAX 15/65",
@@ -740,7 +740,7 @@ const lensesByGenre = {
     "SMC Pentax 55mm f/4", "35mm prime", "50mm prime", "85mm prime", "24-70mm zoom", "70-200mm zoom", "Ring Flash Setup"
   ],
   street: [
-    "24mm prime", "28mm prime", "35mm prime", "50mm prime", "24-70mm zoom",
+    "24mm prime", "28mm prime", "35mm prime", "50mm prime", "Leitz Summicron 50mm f/2 (collapsible)", "24-70mm zoom",
     "38mm prime", "45-85mm zoom", "80mm prime", "90mm tele", "90mm Elmar f/4", "105mm prime", "127mm Ektar"
   ],
   landscape: [
@@ -798,7 +798,7 @@ const lightings = [
   "Ring Light", "Direct Ring Flash / Hard Strobe",
   "Hard Strobe", "Hard Strobe (Zoom Reflector)", 
   "Direct Flash","Neon Practical","Candlelight",
-  "Stadium Lights","Underwater Ambient", "Available Light"
+  "Stadium Lights","Underwater Ambient", "Available Light", "Available light (natural)"
 ];
 
 const lensChars = [
@@ -811,7 +811,8 @@ const lensChars = [
   "Chromatic Aberration", "Distorted & Sharp", 
   "Heavy Vignette", "Swirly Bokeh", "Petzval Curvature",
   "Telephoto Compression",
-  "Vintage Low Contrast"
+  "Vintage Low Contrast",
+  "High micro-contrast, gentle flare/halation, subtle vignetting"
 ];
 
 const films = [
@@ -820,15 +821,15 @@ const films = [
   "Kodak Portra 400NC (Overexposed)",
   "Kodak Vision3 500T (5219)", "Kodak Vision3 250D (5207)", "Kodak Vision3 200T (5213)", "Cinestill 800T",
   "Kodak 5247 100T (70s/80s)", "Kodak 5293 200T", "Technicolor Three-Strip",
-  "Eastman Double-X 5222", "Kodak Tri-X 400", "Kodak Tri-X 400 (Pushed)", "Kodak Tri-X B&W", "Ilford HP5", "Ilford HP5 Plus", "Ilford Delta 3200", "B&W Sheet Film", "B&W Negative",
+  "Eastman Double-X 5222", "Kodak Tri-X 400", "Kodak Tri-X 400 (35mm B&W)", "Kodak Tri-X 400 (Pushed)", "Kodak Tri-X B&W", "Ilford HP5", "Ilford HP5 Plus",
   "Kodachrome 64", "Fujichrome Velvia", "Fujichrome Velvia 50", 
   "Kodak Ektachrome", "Kodak Ektachrome E100",
   "Wet Plate Collodion", "Nitrate Film", "Autochrome Plate", "Kodak Aerochrome (IR)", "Polaroid 600", "Polaroid Type 55",
   "Digital Sensor", "16-bit Digital Raw", "Medium Format Digital", "Digital Video Tape (DV)", "Expired Kodachrome", "Digital", "Expired Kodachrome"  // <-- ADDED 16-bit Raw
 ];
 
-const wbs = ["None","Daylight Balanced","Warm Tungsten","Cool Shade","Mixed Lighting", "Monochrome", "Flash Balanced", "5500K (Flash)", "Warm/Magenta Shift"]; // <-- ADDED 5500K
-const grains = ["None","Clean/No Grain", "Zero Grain", "Fine/Low Grain", "Subtle Grain","Medium Texture","Heavy Grit", "Heavy Silver Halide", "Fine Color Grain", "Organic Medium", "Very Fine", "Fine Dye Cloud"]; // <-- ADDED Zero Grain
+const wbs = ["None","Daylight Balanced","Warm Tungsten","Cool Shade","Mixed Lighting", "Monochrome", "B&W (N/A)", "Flash Balanced", "5500K (Flash)", "Warm/Magenta Shift"]; // <-- ADD B&W (N/A)
+const grains = ["None","Clean/No Grain", "Zero Grain", "Fine/Low Grain", "Subtle Grain","Medium Texture","Classic pronounced grain","Heavy Grit", "Heavy Silver Halide", "Fine Color Grain", "Organic Medium", "Very Fine", "Fine Dye Cloud"]; // <-- ADD Classic pronounced grain
 const productSubgenres = [
   "None",
   "Ecommerce Packshot","Luxury Jewelry Macro","Watch Hero",
@@ -869,7 +870,8 @@ const basePresets = [
   { id:"none", title:"None", desc:"Manual mode", category:"Core", data:{} },
   
   // STREET
-{"id":"leiter-street","title":"Saul Leiter","category":"Street","desc":"Reflections, layered color panes.","data":{"genre":"abstract street","camera":"Leica M3","lens":"90mm Elmar f/4","focal":90,"aperture":"f/4","shutter":"1/60s","iso":"25","lighting":"Available Light","composition":"Layered Abstraction","lightingSetups":["rainy overcast daylight","neon reflections on wet asphalt","window condensation"],"vibe":"Saul Leiter style, painterly aesthetic, shooting through obstructions (steam, rain, windows), telephoto compression, flattened perspective, muted reds and deep blacks.","lensChar":"Vintage Low Contrast","film":"Kodachrome","wb":"Daylight","grain":"Fine"}},  { id:"cartier-bresson", title:"Henri Cartier-Bresson", category:"Street", desc:"The decisive moment.", data:{ genre:"street", camera:"Leica M3", lens:"50mm prime", focal:50, aperture:"f/8", shutter:"1/125s", iso:"400", lighting:"Natural Light", composition:"Leading Lines", vibe:"Henri Cartier-Bresson style, decisive moment timing, balanced negative space, geometric street composition.", lensChar:"Vintage Softness", film:"Kodak Tri-X 400", wb:"Daylight Balanced", grain:"Medium Texture" } },
+  { id:"leiter-street","title":"Saul Leiter","category":"Street","desc":"Reflections, layered color panes.","data":{"genre":"abstract street","camera":"Leica M3","lens":"90mm Elmar f/4","focal":90,"aperture":"f/4","shutter":"1/60s","iso":"25","lighting":"Available Light","composition":"Layered Abstraction","lightingSetups":["rainy overcast daylight","neon reflections on wet asphalt","window condensation"],"vibe":"Saul Leiter style, painterly aesthetic, shooting through obstructions (steam, rain, windows), telephoto compression, flattened perspective, muted reds and deep blacks.","lensChar":"Vintage Low Contrast","film":"Kodachrome","wb":"Daylight","grain":"Fine"}},  
+  { id:"cartier-bresson", title:"Henri Cartier-Bresson", category:"Street", desc:"The decisive moment.", data:{ genre:"street", camera:"Leica M3 (35mm rangefinder, black paint)", lens:"Leitz Summicron 50mm f/2 (collapsible)", focal:50, aperture:"f/8", shutter:"1/125s", iso:"400", lighting:"Available light (natural)", composition:"Geometry & layered framing", vibe:"Decisive-moment street reportage, eye-level candor, clean silhouettes, balanced negative space, strong geometry, minimal cropping aesthetic.", lensChar:"High micro-contrast, gentle flare/halation, subtle vignetting", film:"Kodak Tri-X 400 (35mm B&W)", wb:"B&W (N/A)", grain:"Classic pronounced grain" } },
   { id:"moriyama-flash", title:"Daido Moriyama", category:"Street", desc:"High contrast grit.", data:{ genre:"street", camera:"Ricoh GR21", lens:"28mm prime", focal:28, aperture:"f/11", shutter:"1/60s", iso:"1600", lighting:"Direct Flash", composition:"Tight Close-up", lightingSetups:["hard direct flash, fast falloff shadows"], vibe:"Daido Moriyama style, aggressive close range flash, blur and grain embraced, high contrast blacks, cropped bodies and signage, restless night street energy.", lensChar:"Heavy Vignette", film:"Kodak Tri-X 400", wb:"Mixed Lighting", grain:"Heavy Grit" } },
   { id:"eggleston-color", title:"William Eggleston", category:"Street", desc:"Saturated color, mundane iconic.", data:{ genre:"street", camera:"Leica M3", lens:"50mm prime", focal:50, aperture:"f/8", shutter:"1/250s", iso:"100", lighting:"Natural Light", composition:"Rule of Thirds", vibe:"William Eggleston style, vivid but believable color, quiet mundane subjects, southern daylight, dye-transfer print look.", lensChar:"Vintage Softness", film:"Kodachrome 64", wb:"Daylight Balanced", grain:"Subtle Grain" } },
   { id:"webb-layered", title:"Alex Webb", category:"Street", desc:"Dense frames, hot color, shadows.", data:{ genre:"street", camera:"Leica M6", lens:"35mm prime", focal:35, aperture:"f/8", shutter:"1/500s", iso:"100", lighting:"Golden Hour", composition:"Layered Depth", vibe:"Alex Webb style, complex multi-subject street scenes, saturated color in harsh light, deep shadow zones, complex layering.", lensChar:"Clinical Sharp", film:"Kodachrome 64", wb:"Daylight Balanced", grain:"Subtle Grain" } },
